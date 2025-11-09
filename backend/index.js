@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const session = require("express-session");
 const app = express();
 const dotenv = require("dotenv").config();
 const users = require("./router/users");
@@ -12,6 +13,15 @@ app.use((req, res, next) => {
   console.log("next working");
   next();
 });
+app.use(
+  session({
+    secret: process.env.SECRET_SESSION,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, expire: 60000 },
+  })
+);
+
 app.use("/users", users);
 app.use("/admin", admin);
 app.use((req, res, err, next) => {
