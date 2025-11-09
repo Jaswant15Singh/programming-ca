@@ -12,11 +12,17 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const { pet_name, per_description, additional_policy } = req.body;
-    const { pet_images } = req.file;
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { getUsers, addUser };
+const updateUser = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { getUsers, addUser, updateUser };
