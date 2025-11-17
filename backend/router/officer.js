@@ -3,13 +3,11 @@ const router = express.Router();
 const {
   getAdmin,
   addAdmin,
-  adminLogin,
   updateAdmin,
   deleteAdmin,
 } = require("../controller/admin");
 router.get("/get-admin", getAdmin);
 router.post("/add-admin", addAdmin);
-router.post("/admin-login", adminLogin);
-router.put("/update-admin/:id", updateAdmin);
+router.put("/update-admin", updateAdmin);
 router.delete("/delete-admin", deleteAdmin);
 module.exports = router;

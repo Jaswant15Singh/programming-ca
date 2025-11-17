@@ -6,6 +6,7 @@ const dotenv = require("dotenv").config();
 const users = require("./router/users");
 const admin = require("./router/admin");
 app.use(express.static("public"));
+app.use(express.json());
 
 // console.log(express.static("./index.js"));
 
