@@ -9,6 +9,7 @@ const getAdmin = async (req, res) => {
     res.json(data.rows[0]);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
@@ -55,7 +56,7 @@ const addAdmin = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
@@ -102,7 +103,7 @@ const adminLogin = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
@@ -162,7 +163,7 @@ const updateAdmin = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
@@ -170,18 +171,106 @@ const deleteAdmin = async (req, res) => {
   try {
     const { admin_id } = req.body;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
 const createZone = async (req, res) => {
   try {
-  } catch (error) {}
+    const { zone_name } = req.body;
+    const zoneName = zone_name.toLowerCase();
+    const isZonePresent = await executeQuery(
+      "select * from zones_def where zone_name=$1",
+      [zoneName]
+    );
+    if (isZonePresent.rows.length > 0) {
+      return res.status(400).json({ message: "Zone already exists" });
+    }
+    const result = await executeQuery(
+      "INSERT INTO zones_def(zone_name,created_date) values ($1,now())",
+      [zoneName]
+    );
+    res.status(200).json({ message: "Zone Created Suvvessfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
 };
 
-const createOfficer = () => {
+const updateZone = async (req, res) => {
   try {
-  } catch (error) {}
+    const { zone_name } = req.body;
+    const { zone_id } = req.params;
+
+    const checkQuery = "SELECT * FROM zones_def WHERE zone_id = $1";
+    const checkResult = await executeQuery(checkQuery, [zone_id]);
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ message: "Zone not found" });
+    }
+    const result = await executeQuery(
+      "UPDATE zones_def set zone_name=$1,updated_date=now() where zone_id=$2",
+      [zone_name, zone_id]
+    );
+    res
+      .status(200)
+      .json({ message: "Zone Updated Successfully", success: true });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+const createOfficer = async (req, res) => {
+  try {
+    const {
+      officer_name,
+      officer_address,
+      officer_email,
+      officer_contact,
+      login_username,
+      password,
+    } = req.body;
+
+    if (!login_username || !password) {
+      return res
+        .status(400)
+        .json({ message: "Username and password required" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const query = `
+      INSERT INTO officer_def 
+      (officer_name, officer_address, officer_email, officer_contact, created_date, login_username, password) 
+      VALUES ($1, $2, $3, $4, NOW(), $5, $6)
+      RETURNING officer_id, officer_name, officer_email, login_username
+    `;
+
+    const values = [
+      officer_name,
+      officer_address,
+      officer_email,
+      officer_contact,
+      login_username,
+      hashedPassword,
+    ];
+
+    const result = await executeQuery(query, values);
+    res.status(201).json({
+      message: "Officer created successfully",
+      admin: result.rows[0],
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
+  }
 };
 
-module.exports = { getAdmin, adminLogin, addAdmin, updateAdmin, deleteAdmin };
+module.exports = {
+  getAdmin,
+  adminLogin,
+  addAdmin,
+  updateAdmin,
+  deleteAdmin,
+  createOfficer,
+  createZone,
+  updateZone,
+};
