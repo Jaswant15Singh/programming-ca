@@ -5,6 +5,7 @@ const app = express();
 const dotenv = require("dotenv").config();
 const users = require("./router/users");
 const admin = require("./router/admin");
+const complaint = require("./router/complaint");
 app.use(express.static("public"));
 app.use(express.json());
 
@@ -25,6 +26,7 @@ app.use(
 
 app.use("/users", users);
 app.use("/admin", admin);
+app.use("/complaint", complaint);
 app.use((req, res, err, next) => {
   res.status(500).json({ success: false, message: err.message });
 });
