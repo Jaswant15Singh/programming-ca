@@ -218,6 +218,33 @@ const updateZone = async (req, res) => {
     res.status(500).json({ message: "Server Error", success: false });
   }
 };
+
+const getAllOfficers = async (req, res) => {
+  try {
+    const data = await executeQuery("select * from officer_def");
+    console.log(data.rows[0]);
+    res.json(data.rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
+const getOfficer = async (req, res) => {
+  const { officer_id } = req.params;
+  try {
+    const data = await executeQuery(
+      "select * from officer_def where officer_id=$1",
+      [officer_id]
+    );
+    console.log(data.rows[0]);
+    res.json(data.rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
 const createOfficer = async (req, res) => {
   try {
     const {
@@ -273,4 +300,6 @@ module.exports = {
   createOfficer,
   createZone,
   updateZone,
+  getAllOfficers,
+  getOfficer,
 };

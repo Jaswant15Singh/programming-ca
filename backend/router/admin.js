@@ -9,6 +9,8 @@ const {
   createOfficer,
   createZone,
   updateZone,
+  getAllOfficers,
+  getOfficer,
 } = require("../controller/admin");
 router.get("/get-admin", getAdmin);
 router.post("/add-admin", addAdmin);
@@ -18,4 +20,6 @@ router.delete("/delete-admin", deleteAdmin);
 router.post("/create-officer", createOfficer);
 router.post("/create-zone", createZone);
 router.put("/update-zone/:zone_id", updateZone);
+router.get("/get-all-officers", getAllOfficers);
+router.get("/get-officer/:officer_id", getOfficer);
 module.exports = router;
