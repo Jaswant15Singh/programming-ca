@@ -34,4 +34,23 @@ const updateComplaint = async (req, res) => {
   }
 };
 
+const deleteComplaint = async (req, res) => {
+  try {
+    const { complaint_id } = req.body;
+    const isComplaintPresent = await executeQuery(
+      "SELECT * FROM complaint_def where complaint_id=$1",
+      [complaint_id]
+    );
+    if (isComplaintPresent.rows.length < 1) {
+      return res.status(400).json({ message: "Complaint does not exist" });
+    }
+    await executeQuery(
+      "UPDATE complaint_def set status=false where complaint_id=$1",
+      [complaint_id]
+    );
+    res
+      .status(200)
+      .json({ message: "Complaint Deleted Successfully", success: true });
+  } catch (error) {}
+};
 module.exports = { getComplaint, updateComplaint };
