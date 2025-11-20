@@ -69,4 +69,19 @@ const deleteComplaint = async (req, res) => {
       .json({ message: "Complaint Deleted Successfully", success: true });
   } catch (error) {}
 };
-module.exports = { getComplaint, updateComplaint };
+
+const getAllComments = async (req, res) => {
+  try {
+    const result = await executeQuery("SELECT * FROM comments_def");
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+module.exports = {
+  getComplaint,
+  updateComplaint,
+  getSingleComplaint,
+  addComplaint,
+  getAllComments,
+};
