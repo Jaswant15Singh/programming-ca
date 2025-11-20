@@ -5,9 +5,25 @@ const getComplaint = async (req, res) => {
     res.status(200).json({ result: result.rows });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
+const getSingleComplaint = async (req, res) => {
+  try {
+    const { complaint_id } = req.body;
+    if (!complaint_id) {
+      return res.status(400).json({ message: "Missing Fields" });
+    }
+    const result = await executeQuery(
+      "SELECT * FROM complaint_def where complaint_id=$1",
+      [complaint_id]
+    );
+    res.status(200).json({ result: result.rows });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
 const addComplaint = async (req, res) => {
   try {
     const { user_id, complaint } = req.body;
