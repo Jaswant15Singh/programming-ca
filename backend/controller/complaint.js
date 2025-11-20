@@ -78,10 +78,27 @@ const getAllComments = async (req, res) => {
     res.status(500).json({ message: "Server Error", success: false });
   }
 };
+
+getCommentsOnComplaint = async (req, res) => {
+  try {
+    const { complaint_id } = req.body;
+    if (!complaint_id) {
+      return res.status(400).json({ message: "Missing Fields" });
+    }
+    const result = await executeQuery(
+      "SELECT c.comment FROM comments_def c inner join complaint_def cd on cd.complaint_id=c.complaint_id where cd.complaint_id=$1",
+      [complaint_id]
+    );
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
 module.exports = {
   getComplaint,
   updateComplaint,
   getSingleComplaint,
   addComplaint,
   getAllComments,
+  getCommentsOnComplaint,
 };
