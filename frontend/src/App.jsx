@@ -1,11 +1,21 @@
 import "./App.css";
-import HomeHeader from "./Components/HomeHeader";
-
+import Home from "./Pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
-    <>
-      <HomeHeader />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route exact path="/admin-login" element={<>Admin login</>} />
+        <Route exact path="/resident-login" element={<>Resident login</>} />
+        <Route exact path="/admin/dashboard" element={<>Admin Dashboard</>} />
+        <Route
+          exact
+          path="/resident/dashboard"
+          element={<>Resident Dashboard</>}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
