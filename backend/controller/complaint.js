@@ -140,6 +140,35 @@ const deleteCommentsByComplaint = async (req, res) => {
   }
 };
 
+const likeComment = async (req, res) => {
+  try {
+    const { comment_id, user_id } = req.body;
+
+    if (!comment_id || !user_id) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
+    await executeQuery(
+      "INSERT INTO comment_likes (comment_id, user_id, liked_at) VALUES ($1, $2, NOW())",
+      [comment_id, user_id]
+    );
+
+    res.status(200).json({
+      message: "Comment liked",
+      success: true,
+    });
+  } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({
+        message: "You already liked this comment",
+        success: false,
+      });
+    }
+
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
 module.exports = {
   getComplaint,
   updateComplaint,
@@ -149,4 +178,5 @@ module.exports = {
   getCommentsOnComplaint,
   addComment,
   deleteCommentsByComplaint,
+  likeComment,
 };
