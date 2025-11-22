@@ -106,11 +106,35 @@ const addComment = async (req, res) => {
     if (!complaint_id || !comment) {
       res.status(400).json({ message: "Missing Fields" });
     }
-    executeQuery(
-      "INSERT INTO comments_def complaint_id,comment,comment_date,user_id values ($1,$2,now(),$3)",
+    await executeQuery(
+      "INSERT INTO comments_def (complaint_id, comment, comment_date, user_id) VALUES ($1, $2, NOW(), $3)",
       [complaint_id, comment, user_id]
     );
+
     res.status(200).json({ message: "Comment has been added", success: true });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
+const deleteCommentsByComplaint = async (req, res) => {
+  try {
+    const { complaint_id } = req.body;
+
+    if (!complaint_id) {
+      return res.status(400).json({ message: "Missing complaint_id" });
+    }
+
+    const result = await executeQuery(
+      "DELETE FROM comments_def WHERE complaint_id = $1",
+      [complaint_id]
+    );
+
+    res.status(200).json({
+      message: "Comments for the complaint deleted",
+      count: result.rowCount,
+      success: true,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", success: false });
   }
@@ -124,4 +148,5 @@ module.exports = {
   getAllComments,
   getCommentsOnComplaint,
   addComment,
+  deleteCommentsByComplaint,
 };
