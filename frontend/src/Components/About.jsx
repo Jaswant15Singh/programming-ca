@@ -1,10 +1,7 @@
-import React from "react";
-
 const About = () => {
   return (
     <div className="container py-5">
       <div className="row align-items-center">
-        {/* Left Section – Image */}
         <div className="col-md-6 mb-4 mb-md-0">
           <img
             src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg"
@@ -13,7 +10,6 @@ const About = () => {
           />
         </div>
 
-        {/* Right Section – Text */}
         <div className="col-md-6">
           <h2 className="fw-bold mb-3">About Us</h2>
           <p className="text-muted">
