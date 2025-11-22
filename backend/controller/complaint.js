@@ -79,7 +79,7 @@ const getAllComments = async (req, res) => {
   }
 };
 
-getCommentsOnComplaint = async (req, res) => {
+const getCommentsOnComplaint = async (req, res) => {
   try {
     const { complaint_id } = req.body;
     if (!complaint_id) {
