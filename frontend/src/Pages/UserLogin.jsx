@@ -19,15 +19,23 @@ export default function UserLogin() {
 
     if (!email.trim()) {
       e.email = "Email is required.";
+    } else if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)
+    ) {
+      e.email = "Invalid email address.";
     }
 
     if (!contact.trim()) {
       e.contact = "Contact is required.";
+    } else if (!/^[0-9]{7,15}$/.test(contact)) {
+      e.contact = "Invalid contact (use only digits, min 7).";
     }
 
     if (!username.trim()) e.username = "Username is required.";
     if (!password) {
       e.password = "Password is required.";
+    } else if (password.length < 6) {
+      e.password = "Password must be at least 6 characters.";
     }
 
     return e;
@@ -53,7 +61,7 @@ export default function UserLogin() {
         password,
       };
 
-      const res = await fetch("", {
+      const res = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
