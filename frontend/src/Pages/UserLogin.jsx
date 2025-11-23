@@ -13,6 +13,8 @@ export default function UserLogin() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+  const [loginMessage, setLoginMessage] = useState(null);
+  const [loggginIn, setLoggingIn] = useState(false);
 
   const validate = () => {
     const e = {};
@@ -34,6 +36,7 @@ export default function UserLogin() {
     }
 
     if (!username.trim()) e.username = "Username is required.";
+
     if (!password) {
       e.password = "Password is required.";
     } else if (password.length < 6) {
@@ -43,6 +46,18 @@ export default function UserLogin() {
     return e;
   };
 
+  const loginValidate = () => {
+    const e = {};
+    if (!loginUsername.trim()) e.loginUsername = "Username is required.";
+
+    if (!loginPassword) {
+      e.loginPassword = "Password is required.";
+    } else if (loginPassword.length < 6) {
+      e.loginPassword = "Password must be at least 6 characters.";
+    }
+
+    return e;
+  };
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setMessage(null);
@@ -93,6 +108,42 @@ export default function UserLogin() {
       setMessage({ type: "error", text: "Server error. Try again later." });
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleSignin = async (ev) => {
+    ev.preventDefault();
+    setLoginMessage(null);
+    const validationErrors = loginValidate();
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+    try {
+      setLoggingIn(true);
+      const payload = { loginUsername, loginPassword };
+      const res = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setMessage({
+          type: "error",
+          text: data.message || "Registration failed.",
+        });
+      } else {
+        setMessage({
+          type: "success",
+          text: data.message || "Registered successfully.",
+        });
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoggingIn(false);
     }
   };
 
@@ -225,7 +276,7 @@ export default function UserLogin() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="reg-form" noValidate>
+          <form onSubmit={handleSignin} className="reg-form" noValidate>
             <label>
               Username
               <input
@@ -255,7 +306,7 @@ export default function UserLogin() {
             </label>
 
             <button type="submit" className="reg-btn" disabled={submitting}>
-              {submitting ? "Signing In..." : "Sign In"}
+              {loggginIn ? "Signing In..." : "Sign In"}
             </button>
           </form>
         </div>
