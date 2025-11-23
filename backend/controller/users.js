@@ -1,5 +1,6 @@
 const { pool, executeQuery } = require("../utils/db");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const upload = require("../utils/multer");
 const getUsers = async (req, res) => {
   try {
@@ -55,6 +56,53 @@ const addUser = async (req, res) => {
   }
 };
 
+const userLogin = async (req, res) => {
+  try {
+    const { login_username, password } = req.body;
+
+    if (!login_username || !password) {
+      return res
+        .status(400)
+        .json({ message: "Username and password required" });
+    }
+
+    const query = "SELECT * FROM users_def WHERE login_username = $1";
+    const result = await executeQuery(query, [login_username]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Users not found" });
+    }
+
+    const user = result.rows[0];
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign(
+      { user_id: user.user_id, username: user.login_username },
+      process.env.JWT_TOKEN,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      message: "Login successful",
+      token: token,
+      user: {
+        user_id: user.user_id,
+        user_name: user.user_name,
+        user_email: user.user_email,
+        login_username: user.login_username,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
     const { user_id } = req.body;
@@ -63,4 +111,4 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, addUser, updateUser };
+module.exports = { getUsers, addUser, updateUser, userLogin };
