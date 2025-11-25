@@ -105,9 +105,61 @@ const userLogin = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { user_id } = req.body;
+    const user_id = req.params.id;
+
+    const {
+      user_name,
+      user_address,
+      user_email,
+      user_contact,
+      login_username,
+      password,
+    } = req.body;
+
+    const checkQuery = "SELECT * FROM users_def WHERE user_id = $1";
+    const checkResult = await executeQuery(checkQuery, [user_id]);
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    let hashedPassword = checkResult.rows[0].password;
+
+    if (password && password.trim() !== "") {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const query = `
+       UPDATE users_def SET
+         user_name = $1,
+         user_address = $2,
+         user_email = $3,
+         user_contact = $4,
+         login_username = $5,
+         password = $6
+       WHERE user_id = $7
+       RETURNING user_id, user_name, user_email, login_username
+     `;
+
+    const values = [
+      user_name,
+      user_address,
+      user_email,
+      user_contact,
+      login_username,
+      hashedPassword,
+      user_id,
+    ];
+
+    const result = await executeQuery(query, values);
+
+    res.json({
+      message: "User updated successfully",
+      admin: result.rows[0],
+    });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
   }
 };
 
