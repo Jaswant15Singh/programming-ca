@@ -39,8 +39,8 @@ export default function UserLogin() {
 
     if (!password) {
       e.password = "Password is required.";
-    } else if (password.length < 6) {
-      e.password = "Password must be at least 6 characters.";
+    } else if (password.length < 1) {
+      e.password = "Password is required.";
     }
 
     return e;
@@ -52,8 +52,8 @@ export default function UserLogin() {
 
     if (!loginPassword) {
       e.loginPassword = "Password is required.";
-    } else if (loginPassword.length < 6) {
-      e.loginPassword = "Password must be at least 6 characters.";
+    } else if (loginPassword.length < 1) {
+      e.loginPassword = "Password is required.";
     }
 
     return e;
@@ -70,15 +70,16 @@ export default function UserLogin() {
       setSubmitting(true);
 
       const payload = {
-        name,
-        address,
-        email,
-        contact,
-        username,
+        user_name: name,
+        user_address: address,
+        user_email: email,
+        user_contact: contact,
+        login_username: username,
         password,
       };
+      console.log(payload);
 
-      const res = await fetch("/", {
+      const res = await fetch("http://localhost:5000/users/add-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -108,6 +109,9 @@ export default function UserLogin() {
       setMessage({ type: "error", text: "Server error. Try again later." });
     } finally {
       setSubmitting(false);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
     }
   };
 
@@ -115,12 +119,17 @@ export default function UserLogin() {
     ev.preventDefault();
     setLoginMessage(null);
     const validationErrors = loginValidate();
+    console.log(validationErrors);
+
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     try {
       setLoggingIn(true);
-      const payload = { loginUsername, loginPassword };
-      const res = await fetch("/", {
+      const payload = {
+        login_username: loginUsername,
+        password: loginPassword,
+      };
+      const res = await fetch("http://localhost:5000/users/user-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,21 +138,25 @@ export default function UserLogin() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setMessage({
+        setLoginMessage({
           type: "error",
-          text: data.message || "Registration failed.",
+          text: data.message || "Sign In failed.",
         });
       } else {
-        setMessage({
+        setLoginMessage({
           type: "success",
-          text: data.message || "Registered successfully.",
+          text: data.message || "Signed in successfully.",
         });
         console.log(data);
       }
     } catch (error) {
       console.log(error);
+      setLoginMessage(error.message);
     } finally {
       setLoggingIn(false);
+      setTimeout(() => {
+        setLoginMessage(null);
+      }, 3000);
     }
   };
 
@@ -247,7 +260,7 @@ export default function UserLogin() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     type="password"
-                    placeholder="At least 6 characters"
+                    placeholder="Enter password"
                     className={errors.password ? "input error-input" : "input"}
                   />
                   {errors.password && (
@@ -279,13 +292,13 @@ export default function UserLogin() {
         <div className="reg-card">
           <h2 className="reg-title">Sign In</h2>
 
-          {message && (
+          {loginMessage && (
             <div
               className={`reg-msg ${
-                message.type === "error" ? "error" : "success"
+                loginMessage.type === "error" ? "error" : "success"
               }`}
             >
-              {message.text}
+              {loginMessage.text}
             </div>
           )}
 
@@ -299,8 +312,8 @@ export default function UserLogin() {
                 placeholder="Enter Username"
                 className={errors.username ? "input error-input" : "input"}
               />
-              {errors.username && (
-                <small className="error-text">{errors.username}</small>
+              {errors.loginUsername && (
+                <small className="error-text">{errors.loginUsername}</small>
               )}
             </label>
 
@@ -313,8 +326,8 @@ export default function UserLogin() {
                 placeholder="Enter password"
                 className={errors.password ? "input error-input" : "input"}
               />
-              {errors.password && (
-                <small className="error-text">{errors.password}</small>
+              {errors.loginPassword && (
+                <small className="error-text">{errors.loginPassword}</small>
               )}
             </label>
 
