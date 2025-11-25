@@ -149,7 +149,7 @@ export default function UserLogin() {
 
   return (
     <>
-      {isLogin ? (
+      {!isLogin ? (
         <div className="reg-card">
           <h2 className="reg-title">Register</h2>
 
@@ -260,6 +260,19 @@ export default function UserLogin() {
             <button type="submit" className="reg-btn" disabled={submitting}>
               {submitting ? "Registering..." : "Register"}
             </button>
+            <p className="text-center my-2">
+              Already Signed in? Click here
+              <span
+                onClick={(e) => {
+                  setIsLogin(true);
+                }}
+                className="fw-bold"
+                style={{ color: "#b50707", cursor: "pointer" }}
+              >
+                {" "}
+                Login
+              </span>
+            </p>
           </form>
         </div>
       ) : (
@@ -308,6 +321,19 @@ export default function UserLogin() {
             <button type="submit" className="reg-btn" disabled={submitting}>
               {loggginIn ? "Signing In..." : "Sign In"}
             </button>
+            <p className="text-center my-2">
+              Not Signed in? Click here
+              <span
+                onClick={(e) => {
+                  setIsLogin(false);
+                }}
+                className="fw-bold"
+                style={{ color: "#b50707", cursor: "pointer" }}
+              >
+                {" "}
+                Register
+              </span>
+            </p>
           </form>
         </div>
       )}
