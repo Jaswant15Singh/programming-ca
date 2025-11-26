@@ -20,7 +20,6 @@ const AdminUserData = () => {
     setUsers(data);
   }
 
-  // Pagination Logic
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const currentUsers = users.slice(firstIndex, lastIndex);
