@@ -1,0 +1,108 @@
+/* Register.css */
+.reg-card {
+  max-width: 520px;
+  margin: 24px auto;
+  padding: 22px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+.reg-title {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  text-align: center;
+  color: #222;
+}
+
+.reg-msg {
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+.reg-msg.error {
+  background: #ffe9e9;
+  color: #8b1e1e;
+  border: 1px solid #f0b4b4;
+}
+.reg-msg.success {
+  background: #e9ffef;
+  color: #166d2f;
+  border: 1px solid #acd9b3;
+}
+
+.reg-form label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d7d7d7;
+  margin-top: 6px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  background: #fff;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.col {
+  flex: 1;
+}
+
+.reg-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #0b5ed7;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.reg-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Error styling */
+.error-text {
+  color: #b72121;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: block;
+}
+
+.error-input {
+  border-color: #f1a1a1;
+  box-shadow: 0 0 0 3px rgba(241, 161, 161, 0.07);
+}
+
+@media (max-width: 520px) {
+  .row {
+    flex-direction: column;
+  }
+  .reg-card {
+    margin: 12px;
+    padding: 16px;
+  }
+}
