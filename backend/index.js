@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
+const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv").config();
 const users = require("./router/users");
@@ -11,6 +12,11 @@ app.use(express.json());
 
 // console.log(express.static("./index.js"));
 
+app.use(
+  cors({
+    PORT: 5173,
+  })
+);
 app.use((req, res, next) => {
   console.log("next working");
   next();
