@@ -4,10 +4,12 @@ import Pagination from "react-bootstrap/Pagination";
 import AdminSidebar from "../Components/AdminSidebar";
 import AdminTopbar from "../Components/AdminTopbar";
 import "../stylesheet/AdminDashboard.css";
+import ZoneAdd from "../Components/ZoneAdd";
 
 const Zones = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showForm, setShowForm] = useState(false);
   const recordsPerPage = 5;
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const Zones = () => {
           <AdminTopbar />
 
           <div className="dashboard">
+            <ZoneAdd showForm={showForm} setShowForm={setShowForm} />
             <h2 className="mb-3">All Users</h2>
 
             <Table striped bordered hover responsive>
