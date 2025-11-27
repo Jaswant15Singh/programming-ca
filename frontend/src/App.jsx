@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Admin from "./Pages/Admin";
 import AdminUserData from "./Pages/AdminUserData";
 import Zones from "./Pages/Zones";
+import Offficer from "./Pages/Officer";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("admin-token");
@@ -35,6 +36,7 @@ function App() {
         <Route exact path="/admin/dashboard" element={<Admin />} />
         <Route exact path="/admin/users" element={<AdminUserData />} />
         <Route exact path="/admin/zones" element={<Zones />} />
+        <Route exact path="/admin/officer" element={<Offficer />} />
         <Route
           exact
           path="/resident/dashboard"
