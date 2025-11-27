@@ -1,106 +1,120 @@
 import React, { useState } from "react";
+import "../stylesheet/UserLogin.css";
+import HomeHeader from "../Components/HomeHeader";
+export default function ZoneAdd({ showForm, setShowForm }) {
+  const [name, setName] = useState("");
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState(null);
 
-const ZoneAdd = ({ showForm, setShowForm }) => {
-  const [zoneName, setZoneName] = useState("");
+  const validate = () => {
+    const e = {};
+    if (!name.trim()) e.name = "Zone name is required.";
+    return e;
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Zone Added:", zoneName);
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    setMessage(null);
 
-    setZoneName("");
-    setShowForm(false);
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
+    try {
+      setSubmitting(true);
+
+      const payload = {
+        zone_name: name,
+      };
+      console.log(payload);
+
+      const res = await fetch("http://localhost:5000/admin/create-zone", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage({
+          type: "error",
+          text: data.message || "Creation failed.",
+        });
+      } else {
+        setMessage({
+          type: "success",
+          text: data.message || "Created successfully.",
+        });
+        setName("");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage({ type: "error", text: "Server error. Try again later." });
+    } finally {
+      setSubmitting(false);
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      {!showForm && (
-        <button
-          onClick={() => setShowForm(true)}
+    <div className={`${showForm ? "overlay" : ""}`}>
+      <div
+        className="reg-card"
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%,-50%)",
+          display: showForm ? "block" : "none",
+        }}
+      >
+        <h2 className="reg-title">Create Zone</h2>
+        <p
           style={{
-            padding: "8px 16px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
+            position: "absolute",
+            top: "20px",
+            right: "20px",
             cursor: "pointer",
           }}
-        >
-          Add Zone
-        </button>
-      )}
-
-      {showForm && (
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            marginTop: "20px",
-            padding: "20px",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-            width: "300px",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
+          onClick={() => {
+            setShowForm(!showForm);
           }}
         >
-          <h3>Add Zone</h3>
+          &#10060;
+        </p>
 
-          <div style={{ marginBottom: "15px" }}>
-            <label
-              htmlFor="zoneName"
-              style={{ display: "block", marginBottom: "5px" }}
-            >
-              Zone Name:
-            </label>
-            <input
-              type="text"
-              id="zoneName"
-              value={zoneName}
-              onChange={(e) => setZoneName(e.target.value)}
-              required
-              style={{
-                width: "100%",
-                padding: "8px",
-                border: "1px solid #aaa",
-                borderRadius: "4px",
-              }}
-            />
+        {message && (
+          <div
+            className={`reg-msg ${
+              message.type === "error" ? "error" : "success"
+            }`}
+          >
+            {message.text}
           </div>
+        )}
 
-          <button
-            type="submit"
-            style={{
-              padding: "8px 16px",
-              backgroundColor: "green",
-              color: "#fff",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Submit
-          </button>
+        <form onSubmit={handleSubmit} className="reg-form" noValidate>
+          <label>
+            Name
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              type="text"
+              placeholder="Full name"
+              className={errors.name ? "input error-input" : "input"}
+            />
+            {errors.name && <small className="error-text">{errors.name}</small>}
+          </label>
 
-          <button
-            type="button"
-            onClick={() => setShowForm(false)}
-            style={{
-              padding: "8px 16px",
-              marginLeft: "10px",
-              backgroundColor: "red",
-              color: "#fff",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Cancel
+          <button type="submit" className="reg-btn" disabled={submitting}>
+            {submitting ? "Registering..." : "Register"}
           </button>
         </form>
-      )}
+      </div>
     </div>
   );
-};
-
-export default ZoneAdd;
+}
