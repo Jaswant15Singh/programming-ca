@@ -4,6 +4,9 @@ import Home from "./Pages/Home";
 import UserLogin from "./Pages/UserLogin";
 import AdminLogin from "./Pages/AdminLogin";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Admin from "./Pages/Admin";
+import AdminUserData from "./Pages/AdminUserData";
+import Zones from "./Pages/Zones";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("admin-token");
@@ -29,7 +32,9 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/admin-login" element={<AdminLogin />} />
         <Route exact path="/resident-login" element={<UserLogin />} />
-        <Route exact path="/admin/dashboard" element={<>Admin Dashboard</>} />
+        <Route exact path="/admin/dashboard" element={<Admin />} />
+        <Route exact path="/admin/users" element={<AdminUserData />} />
+        <Route exact path="/admin/zones" element={<Zones />} />
         <Route
           exact
           path="/resident/dashboard"

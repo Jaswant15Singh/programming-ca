@@ -7,7 +7,9 @@ const HomeHeader = () => {
       <header className="header">
         <div className="header-overlay">
           <div className="header-content">
-            <h1 className="header-logo">My Website</h1>
+            <Link className="header-logo link" to="/">
+              My Website
+            </Link>
 
             <div className="header-buttons">
               <Link
@@ -18,7 +20,7 @@ const HomeHeader = () => {
                 Admin Login
               </Link>
               <Link
-                to="/user-login"
+                to="/resident-login"
                 className="link"
                 style={{ background: "yellow" }}
               >

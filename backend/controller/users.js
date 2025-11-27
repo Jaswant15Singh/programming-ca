@@ -6,7 +6,7 @@ const getUsers = async (req, res) => {
   try {
     const data = await executeQuery("select * from users_def");
     console.log(data.rows[0]);
-    res.json(data.rows[0]);
+    res.json(data.rows);
   } catch (error) {
     console.log(error);
   }
@@ -70,7 +70,7 @@ const userLogin = async (req, res) => {
     const result = await executeQuery(query, [login_username]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Users not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const user = result.rows[0];

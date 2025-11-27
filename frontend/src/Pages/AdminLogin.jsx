@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../stylesheet/UserLogin.css";
+import HomeHeader from "../Components/HomeHeader";
 export default function AdminLogin() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -129,7 +130,7 @@ export default function AdminLogin() {
         login_username: loginUsername,
         password: loginPassword,
       };
-      const res = await fetch("http://localhost:5000/users/user-login", {
+      const res = await fetch("http://localhost:5000/admin/admin-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +149,7 @@ export default function AdminLogin() {
           text: data.message || "Signed in successfully.",
         });
         console.log(data);
-        localStorage.setItem("user-token", data.token);
+        localStorage.setItem("admin-token", data.token);
       }
     } catch (error) {
       console.log(error);
@@ -163,7 +164,8 @@ export default function AdminLogin() {
 
   return (
     <>
-      {!isLogin ? (
+      <HomeHeader />
+      {isLogin ? (
         <div className="reg-card">
           <h2 className="reg-title">Register</h2>
 
@@ -335,7 +337,7 @@ export default function AdminLogin() {
             <button type="submit" className="reg-btn" disabled={submitting}>
               {loggginIn ? "Signing In..." : "Sign In"}
             </button>
-            <p className="text-center my-2">
+            {/* <p className="text-center my-2">
               Not Signed in? Click here
               <span
                 onClick={() => {
@@ -347,7 +349,7 @@ export default function AdminLogin() {
                 {" "}
                 Register
               </span>
-            </p>
+            </p> */}
           </form>
         </div>
       )}

@@ -7,8 +7,6 @@ function AdminTopbar() {
       <input className="search-box" placeholder="Search..." />
 
       <div className="topbar-icons">
-        <span>🔔</span>
-        <span>💬</span>
         <img
           className="profile-img"
           src="https://i.pravatar.cc/40"

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../stylesheet/UserLogin.css";
+import HomeHeader from "../Components/HomeHeader";
 export default function UserLogin() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -148,6 +149,7 @@ export default function UserLogin() {
           text: data.message || "Signed in successfully.",
         });
         console.log(data);
+        localStorage.setItem("user-token", data.token);
       }
     } catch (error) {
       console.log(error);
@@ -162,6 +164,7 @@ export default function UserLogin() {
 
   return (
     <>
+      <HomeHeader />
       {!isLogin ? (
         <div className="reg-card">
           <h2 className="reg-title">Register</h2>

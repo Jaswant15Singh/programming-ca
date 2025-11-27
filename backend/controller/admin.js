@@ -231,7 +231,7 @@ const getAllOfficers = async (req, res) => {
   try {
     const data = await executeQuery("select * from officer_def");
     console.log(data.rows[0]);
-    res.json(data.rows[0]);
+    res.json(data.rows);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error", success: false });

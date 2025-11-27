@@ -7,24 +7,28 @@ function AdminSidebar() {
       <h2 className="sidebar-logo">AdminPanel</h2>
 
       <ul className="menu">
-        <li className="active">Dashboard</li>
+        <li className="active">
+          <Link className="link-admin-sidebar" to="/admin/dashboard">
+            Dashboard
+          </Link>
+        </li>
         <li>
-          <Link className="link-admin-sidebar" to="/admin/dashboard/users">
+          <Link className="link-admin-sidebar" to="/admin/users">
             Users
           </Link>
         </li>
         <li>
-          <Link className="link-admin-sidebar" to="/admin/dashboard/users">
+          <Link className="link-admin-sidebar" to="/admin/zones">
             Zones
           </Link>
         </li>
         <li>
-          <Link className="link-admin-sidebar" to="/admin/dashboard/users">
+          <Link className="link-admin-sidebar" to="/admin/users">
             Officers
           </Link>
         </li>
         <li>
-          <Link className="link-admin-sidebar" to="/admin/dashboard/users">
+          <Link className="link-admin-sidebar" to="/admin/users">
             Complaints
           </Link>
         </li>

@@ -51,6 +51,14 @@ const Zones = () => {
 
           <div className="dashboard">
             <ZoneAdd showForm={showForm} setShowForm={setShowForm} />
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setShowForm(!showForm);
+              }}
+            >
+              Add Zone
+            </button>
             <h2 className="mb-3">All Users</h2>
 
             <Table striped bordered hover responsive>

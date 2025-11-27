@@ -76,3 +76,9 @@ th {
   text-align: left;
   background: #f1f1f1;
 }
+
+@media (max-width: 767px) {
+  .cards {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
