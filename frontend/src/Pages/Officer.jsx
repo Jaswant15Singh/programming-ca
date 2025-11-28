@@ -5,12 +5,20 @@ import AdminSidebar from "../Components/AdminSidebar";
 import AdminTopbar from "../Components/AdminTopbar";
 import "../stylesheet/AdminDashboard.css";
 import ZoneAdd from "../Components/ZoneAdd";
+import OfficerAdd from "../Components/OfficerAdd";
 
 const Offficer = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const recordsPerPage = 5;
+  const [isAdding, setIsAdding] = useState(true);
+  const [editingId, setEditingId] = useState(null);
+  const [editingName, setEditingName] = useState("");
+  const [editingAddress, setEditingAddress] = useState("");
+  const [editingEmail, setEditingEmail] = useState("");
+  const [editingContact, setEditingContact] = useState("");
+  const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
     fetchUsers();
@@ -50,16 +58,31 @@ const Offficer = () => {
           <AdminTopbar />
 
           <div className="dashboard">
-            <ZoneAdd showForm={showForm} setShowForm={setShowForm} />
+            <OfficerAdd
+              showForm={showForm}
+              setShowForm={setShowForm}
+              isAdding={isAdding}
+              setIsAdding={setIsAdding}
+              editingId={editingId}
+              editingName={editingName}
+              editingAddress={editingAddress}
+              editingEmail={editingEmail}
+              editingContact={editingContact}
+              setEditingId={setEditingId}
+              fetching={fetching}
+              setFetching={setFetching}
+            />
             <button
               className="btn btn-primary"
               onClick={() => {
                 setShowForm(!showForm);
               }}
             >
-              Add Zone
+              Add Officer
             </button>
-            <h2 className="mb-3">All Users</h2>
+            <br />
+            <br />
+            <h2 className="mb-3">All Officers</h2>
 
             <Table striped bordered hover responsive>
               <thead>
@@ -86,7 +109,20 @@ const Offficer = () => {
                     <td>{u.created_date.slice(0, 10)}</td>
                     <td>{u.updated_date ? u.updated_date : "NA"}</td>
                     <td>
-                      <button className="btn btn-primary">Update</button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setIsAdding(false);
+                          setEditingId(u.officer_id);
+                          setEditingName(u.officer_name);
+                          setEditingAddress(u.officer_address);
+                          setEditingEmail(u.officer_email);
+                          setEditingContact(u.officer_contact);
+                          setShowForm(true);
+                        }}
+                      >
+                        Update
+                      </button>
                     </td>
                   </tr>
                 ))}
