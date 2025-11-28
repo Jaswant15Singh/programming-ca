@@ -1,7 +1,9 @@
 const { pool, executeQuery } = require("../utils/db");
 const getComplaint = async (req, res) => {
   try {
-    const result = await executeQuery("SELECT * FROM complaint_def");
+    const result =
+      await executeQuery(`select  cd.complaint,cd.complaint_images ,u.user_name,cd.status,cd.complaint_date from complaint_def cd
+inner join users_def  u on u.user_id=cd.user_id`);
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
@@ -9,9 +11,25 @@ const getComplaint = async (req, res) => {
   }
 };
 
+const getComplaintByUsers = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    if (!user_id) {
+      return res.status(400).json({ message: "Missing Fields" });
+    }
+    const result = await executeQuery(
+      "SELECT * FROM complaint_def where user_id=$1",
+      [user_id]
+    );
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
 const getSingleComplaint = async (req, res) => {
   try {
-    const { complaint_id } = req.body;
+    const { complaint_id } = req.params;
     if (!complaint_id) {
       return res.status(400).json({ message: "Missing Fields" });
     }
@@ -94,11 +112,6 @@ const getCommentsOnComplaint = async (req, res) => {
     res.status(500).json({ message: "Server Error", success: false });
   }
 };
-
-/*
-request to be made
-add,delete,update comments
-*/
 
 const addComment = async (req, res) => {
   try {
@@ -215,4 +228,5 @@ module.exports = {
   deleteCommentsByComplaint,
   likeComment,
   unlikeComment,
+  getComplaintByUsers,
 };
