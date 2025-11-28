@@ -1,31 +1,57 @@
 import React from "react";
 import "../stylesheet/AdminSidebar.css";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
 function AdminSidebar() {
   return (
     <div className="sidebar">
       <h2 className="sidebar-logo">AdminPanel</h2>
 
       <ul className="menu">
-        <Link className="link-admin-sidebar" to="/admin/dashboard">
-          <li className="active">Dashboard</li>
-        </Link>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+          }
+          to="/admin/dashboard"
+        >
+          <li>Dashboard</li>
+        </NavLink>
 
-        <Link className="link-admin-sidebar" to="/admin/users">
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+          }
+          to="/admin/users"
+        >
           <li>Users</li>
-        </Link>
+        </NavLink>
 
-        <Link className="link-admin-sidebar" to="/admin/zones">
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+          }
+          to="/admin/zones"
+        >
           <li>Zones</li>
-        </Link>
+        </NavLink>
 
-        <Link className="link-admin-sidebar" to="/admin/officer">
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+          }
+          to="/admin/officer"
+        >
           <li>Officers</li>
-        </Link>
+        </NavLink>
 
-        <Link className="link-admin-sidebar" to="/admin/complaints">
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+          }
+          to="/admin/complaints"
+        >
           <li>Complaints</li>
-        </Link>
+        </NavLink>
 
         <li>Settings</li>
       </ul>
