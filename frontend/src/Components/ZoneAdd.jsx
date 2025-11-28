@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../stylesheet/UserLogin.css";
 import HomeHeader from "../Components/HomeHeader";
-export default function ZoneAdd({ showForm, setShowForm }) {
+export default function ZoneAdd({
+  showForm,
+  setShowForm,
+  isAdding,
+  setIsAdding,
+  editingId,
+  editingName,
+  setEditingId,
+}) {
   const [name, setName] = useState("");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    if (!isAdding && editingName) {
+      setName(editingName);
+    }
+  }, [editingName, isAdding]);
 
   const validate = () => {
     const e = {};
@@ -27,13 +41,19 @@ export default function ZoneAdd({ showForm, setShowForm }) {
       const payload = {
         zone_name: name,
       };
+      let zone_id = editingId;
       console.log(payload);
 
-      const res = await fetch("http://localhost:5000/admin/create-zone", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        isAdding
+          ? "http://localhost:5000/admin/create-zone"
+          : `http://localhost:5000/admin/update-zone/${zone_id}`,
+        {
+          method: isAdding ? "POST" : "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await res.json();
 
@@ -54,6 +74,8 @@ export default function ZoneAdd({ showForm, setShowForm }) {
       setMessage({ type: "error", text: "Server error. Try again later." });
     } finally {
       setSubmitting(false);
+      setEditingId(null);
+      setIsAdding(true);
       setTimeout(() => {
         setMessage(null);
       }, 3000);
