@@ -45,12 +45,21 @@ const getSingleComplaint = async (req, res) => {
 const addComplaint = async (req, res) => {
   try {
     const { user_id, complaint } = req.body;
+    const files = req.files;
+    if (!files || files.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "At least one image is required" });
+    }
+
     if (!user_id || !complaint) {
       return res.status(400).json({ message: "Missing Fields" });
     }
+
+    const imagePaths = files.map((file) => file.path);
     await executeQuery(
-      "INSERT INTO complaint_def (user_id,complaint,status,created_date) values ($1,$2,false,now())",
-      [user_id, complaint]
+      "INSERT INTO complaint_def (user_id,complaint,complaint_images,status,created_date) values ($1,$2,$3,false,now())",
+      [user_id, complaint, imagePaths]
     );
     res
       .status(200)
