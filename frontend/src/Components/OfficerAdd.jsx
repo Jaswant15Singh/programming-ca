@@ -1,7 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../stylesheet/UserLogin.css";
 import HomeHeader from "../Components/HomeHeader";
-export default function OfficerAdd({ showForm, setShowForm }) {
+export default function OfficerAdd({
+  showForm,
+  setShowForm,
+  isAdding,
+  setIsAdding,
+  editingId,
+  editingName,
+  editingAddress,
+  editingEmail,
+  editingContact,
+  setEditingId,
+  fetching,
+  setFetching,
+}) {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
@@ -11,6 +24,13 @@ export default function OfficerAdd({ showForm, setShowForm }) {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    setName(editingName);
+    setAddress(editingAddress);
+    setEmail(editingEmail);
+    setContact(editingContact);
+  }, [editingName, isAdding]);
 
   const validate = () => {
     const e = {};
@@ -63,11 +83,16 @@ export default function OfficerAdd({ showForm, setShowForm }) {
       };
       console.log(payload);
 
-      const res = await fetch("http://localhost:5000/admin/create-officer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        isAdding
+          ? "http://localhost:5000/admin/create-officer"
+          : `http://localhost:5000/officer/update-officer/${editingId}`,
+        {
+          method: isAdding ? "POST" : "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await res.json();
 
@@ -87,12 +112,15 @@ export default function OfficerAdd({ showForm, setShowForm }) {
         setContact("");
         setUsername("");
         setPassword("");
+        setFetching(!fetching);
       }
     } catch (err) {
       console.error(err);
       setMessage({ type: "error", text: "Server error. Try again later." });
     } finally {
       setSubmitting(false);
+      setEditingId(null);
+      setIsAdding(true);
       setTimeout(() => {
         setMessage(null);
       }, 3000);
