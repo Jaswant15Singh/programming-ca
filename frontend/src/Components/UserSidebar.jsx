@@ -12,7 +12,7 @@ function UserSidebar() {
           className={({ isActive }) =>
             isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
           }
-          to="/admin/dashboard"
+          to="/resident/dashboard"
         >
           <li>Dashboard</li>
         </NavLink>
@@ -21,39 +21,19 @@ function UserSidebar() {
           className={({ isActive }) =>
             isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
           }
-          to="/admin/users"
-        >
-          <li>Users</li>
-        </NavLink>
-
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
-          }
-          to="/admin/zones"
-        >
-          <li>Zones</li>
-        </NavLink>
-
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
-          }
-          to="/admin/officer"
-        >
-          <li>Officers</li>
-        </NavLink>
-
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
-          }
-          to="/admin/complaints"
+          to="/resident/complaints"
         >
           <li>Complaints</li>
         </NavLink>
 
-        <li>Settings</li>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+          }
+          to="/resident/profile"
+        >
+          <li>Profile</li>
+        </NavLink>
       </ul>
     </div>
   );

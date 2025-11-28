@@ -5,14 +5,16 @@ import AdminTopbar from "../Components/AdminTopbar";
 ("../Components/AdminTopbar");
 import AdminDashboard from "../Components/AdminDashboard";
 import UserSidebar from "../Components/UserSidebar";
+import UserTopbar from "../Components/UserTopbar";
+import UserDashboard from "../Components/UserDashboard";
 ("../Components/AdminDashboard");
 const Users = () => {
   return (
     <div className="admin-container">
       <UserSidebar />
       <div className="main-content">
-        <AdminTopbar />
-        <AdminDashboard />
+        <UserTopbar />
+        <UserDashboard />
       </div>
     </div>
   );
