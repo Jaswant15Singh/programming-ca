@@ -11,6 +11,9 @@ const Zones = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const recordsPerPage = 5;
+  const [isAdding, setIsAdding] = useState(true);
+  const [editingId, setEditingId] = useState(null);
+  const [editingName, setEditingName] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -50,7 +53,16 @@ const Zones = () => {
           <AdminTopbar />
 
           <div className="dashboard">
-            <ZoneAdd showForm={showForm} setShowForm={setShowForm} />
+            <ZoneAdd
+              showForm={showForm}
+              setShowForm={setShowForm}
+              isAdding={isAdding}
+              setIsAdding={setIsAdding}
+              editingId={editingId}
+              editingName={editingName}
+              setEditingId={setEditingId}
+            />
+
             <button
               className="btn btn-primary"
               onClick={() => {
@@ -78,9 +90,19 @@ const Zones = () => {
                     <td>{firstIndex + i + 1}</td>
                     <td>{u.zone_name}</td>
                     <td>{u.created_date.slice(0, 10)}</td>
-                    <td>{u.updated_date}</td>
+                    <td>{u.updated_date ? u.updated_date : "NA"}</td>
                     <td>
-                      <button className="btn btn-primary">Update</button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setIsAdding(false);
+                          setEditingId(u.zone_id);
+                          setEditingName(u.zone_name);
+                          setShowForm(true);
+                        }}
+                      >
+                        Update
+                      </button>
                     </td>
                   </tr>
                 ))}
