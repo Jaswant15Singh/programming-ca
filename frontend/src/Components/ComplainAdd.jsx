@@ -31,7 +31,47 @@ export default function ComplainAdd({
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    console.log(1);
+    setMessage(null);
+
+    if (!selectedOfficer) {
+      setMessage({ type: "error", text: "Please select an officer." });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(
+        `http://localhost:5000/complaint/assign-officer-complaint/${complaintId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ officer_id: selectedOfficer }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage({
+          type: "error",
+          text: data.message || "Failed to assign officer.",
+        });
+      } else {
+        setMessage({
+          type: "success",
+          text: data.message || "Officer assigned successfully.",
+        });
+        setTimeout(() => {
+          closeForm();
+          if (onSuccess) onSuccess();
+        }, 1500);
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      setMessage({ type: "error", text: "Server error. Try again later." });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const closeForm = () => {

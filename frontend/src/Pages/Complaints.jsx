@@ -6,19 +6,31 @@ import AdminTopbar from "../Components/AdminTopbar";
 import "../stylesheet/AdminDashboard.css";
 import ZoneAdd from "../Components/ZoneAdd";
 import OfficerAdd from "../Components/OfficerAdd";
+import ComplainAdd from "../Components/ComplainAdd";
 
 const Complaints = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
+  const [showAssignForm, setShowAssignForm] = useState(false);
+  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const recordsPerPage = 5;
+
+  const handleAssignClick = (complaintId) => {
+    setSelectedComplaintId(complaintId);
+    setShowAssignForm(true);
+  };
+
+  const handleAssignSuccess = () => {
+    fetchUsers();
+  };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   async function fetchUsers() {
-    const res = await fetch("http://localhost:5000/admin/get-all-officers");
+    const res = await fetch("http://localhost:5000/complaint/get-complaints");
     const data = await res.json();
     setUsers(data);
   }
@@ -51,7 +63,12 @@ const Complaints = () => {
           <AdminTopbar />
 
           <div className="dashboard">
-            <OfficerAdd showForm={showForm} setShowForm={setShowForm} />
+            <ComplainAdd
+              showForm={showAssignForm}
+              setShowForm={setShowAssignForm}
+              complaintId={selectedComplaintId}
+              onSuccess={handleAssignSuccess}
+            />
             <button
               className="btn btn-primary"
               onClick={() => {
@@ -62,18 +79,16 @@ const Complaints = () => {
             </button>
             <br />
             <br />
-            <h2 className="mb-3">All Officers</h2>
+            <h2 className="mb-3">All Complaints</h2>
 
             <Table striped bordered hover responsive>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
-                  <th>Address</th>
-                  <th>Email</th>
-                  <th>Contact</th>
-                  <th>Created date</th>
-                  <th>Update date</th>
+                  <th>Complaint</th>
+                  <th>User</th>
+                  <th>Status</th>
+                  <th>Complaint date</th>
                   <th>Update</th>
                 </tr>
               </thead>
@@ -82,14 +97,17 @@ const Complaints = () => {
                 {currentUsers.map((u, i) => (
                   <tr key={i}>
                     <td>{firstIndex + i + 1}</td>
-                    <td>{u.officer_name}</td>
-                    <td>{u.officer_address}</td>
-                    <td>{u.officer_email}</td>
-                    <td>{u.officer_contact}</td>
-                    <td>{u.created_date.slice(0, 10)}</td>
-                    <td>{u.updated_date ? u.updated_date : "NA"}</td>
+                    <td>{u.complaint}</td>
+                    <td>{u.user_name}</td>
+                    <td>{u.status}</td>
+                    <td>{u.complaint_date}</td>
                     <td>
-                      <button className="btn btn-primary">Update</button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleAssignClick(u.complaint_id)}
+                      >
+                        Update
+                      </button>
                     </td>
                   </tr>
                 ))}
