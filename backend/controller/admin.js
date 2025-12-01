@@ -230,7 +230,6 @@ const updateZone = async (req, res) => {
 const getAllOfficers = async (req, res) => {
   try {
     const data = await executeQuery("select * from officer_def");
-    console.log(data.rows[0]);
     res.json(data.rows);
   } catch (error) {
     console.log(error);
@@ -299,6 +298,53 @@ const createOfficer = async (req, res) => {
   }
 };
 
+const officerLogin = async (req, res) => {
+  try {
+    const { login_username, password } = req.body;
+
+    if (!login_username || !password) {
+      return res
+        .status(400)
+        .json({ message: "Username and password required" });
+    }
+
+    const query = "SELECT * FROM officer_def WHERE login_username = $1";
+    const result = await executeQuery(query, [login_username]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Officer not found" });
+    }
+
+    const admin = result.rows[0];
+
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign(
+      { officer_id: admin.officer_id, username: admin.login_username },
+      process.env.JWT_TOKEN,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      message: "Login successful",
+      token: token,
+      admin: {
+        officer_id: admin.officer_id,
+        officer_name: admin.officer_name,
+        officer_email: admin.officer_email,
+        login_username: admin.login_username,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
 module.exports = {
   getAdmin,
   adminLogin,
@@ -306,6 +352,7 @@ module.exports = {
   updateAdmin,
   deleteAdmin,
   createOfficer,
+  officerLogin,
   createZone,
   updateZone,
   getAllOfficers,
