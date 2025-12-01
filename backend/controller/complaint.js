@@ -2,7 +2,7 @@ const { pool, executeQuery } = require("../utils/db");
 const getComplaint = async (req, res) => {
   try {
     const result =
-      await executeQuery(`select  cd.complaint,cd.complaint_images ,u.user_name,cd.status,cd.complaint_date from complaint_def cd
+      await executeQuery(`select  cd.complaint_id,cd.complaint,cd.complaint_images ,u.user_name,cd.status,cd.complaint_date from complaint_def cd
 inner join users_def  u on u.user_id=cd.user_id`);
     res.status(200).json(result.rows);
   } catch (error) {
@@ -43,6 +43,8 @@ const getSingleComplaint = async (req, res) => {
   }
 };
 const addComplaint = async (req, res) => {
+  console.log(13373737);
+
   try {
     const { user_id, complaint } = req.body;
     const files = req.files;
@@ -58,7 +60,7 @@ const addComplaint = async (req, res) => {
 
     const imagePaths = files.map((file) => file.path);
     await executeQuery(
-      "INSERT INTO complaint_def (user_id,complaint,complaint_images,status,created_date) values ($1,$2,$3,false,now())",
+      "INSERT INTO complaint_def (user_id,complaint,complaint_images,status,complaint_date) values ($1,$2,$3,'pending',now())",
       [user_id, complaint, imagePaths]
     );
     res
@@ -226,6 +228,50 @@ const unlikeComment = async (req, res) => {
   }
 };
 
+const assignOfficerToComplaint = async (req, res) => {
+  try {
+    const { complaintId } = req.params;
+    const { officer_id } = req.body;
+
+    if (!officer_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Officer ID is required",
+      });
+    }
+
+    const query = `
+      UPDATE complaint_def 
+      SET assigned_officer = $1, 
+          status = 'progress'
+      WHERE complaint_id = $2
+      RETURNING *
+    `;
+
+    const result = await pool.query(query, [officer_id, complaintId]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Complaint not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Officer assigned successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error assigning officer:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to assign officer",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getComplaint,
   updateComplaint,
@@ -238,4 +284,5 @@ module.exports = {
   likeComment,
   unlikeComment,
   getComplaintByUsers,
+  assignOfficerToComplaint,
 };
