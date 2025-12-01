@@ -8,9 +8,12 @@ export default function AdminLogin() {
   const [contact, setContact] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [officerLoginUsername, setOfficerLoginUsername] = useState("");
+  const [officerPassword, setOfficerPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(true);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
@@ -55,6 +58,19 @@ export default function AdminLogin() {
       e.loginPassword = "Password is required.";
     } else if (loginPassword.length < 1) {
       e.loginPassword = "Password is required.";
+    }
+
+    return e;
+  };
+  const loginValidateOfficer = () => {
+    const e = {};
+    if (!officerLoginUsername.trim())
+      e.officerLoginUsername = "Username is required.";
+
+    if (!officerPassword) {
+      e.officerPassword = "Password is required.";
+    } else if (officerPassword.length < 1) {
+      e.officerPassword = "Password is required.";
     }
 
     return e;
@@ -119,24 +135,29 @@ export default function AdminLogin() {
   const handleSignin = async (ev) => {
     ev.preventDefault();
     setLoginMessage(null);
-    const validationErrors = loginValidate();
-    console.log(validationErrors);
-
+    const validationErrors = isAdmin ? loginValidate() : loginValidateOfficer();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
     try {
       setLoggingIn(true);
       const payload = {
-        login_username: loginUsername,
-        password: loginPassword,
+        login_username: isAdmin ? loginUsername : officerLoginUsername,
+        password: isAdmin ? loginPassword : officerPassword,
       };
-      const res = await fetch("http://localhost:5000/admin/admin-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `${
+          isAdmin
+            ? "http://localhost:5000/admin/admin-login"
+            : "http://localhost:5000/admin/officer-login"
+        }`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         setLoginMessage({
@@ -149,7 +170,9 @@ export default function AdminLogin() {
           text: data.message || "Signed in successfully.",
         });
         console.log(data);
-        localStorage.setItem("admin-token", data.token);
+        isAdmin
+          ? localStorage.setItem("admin-token", data.token)
+          : localStorage.setItem("officer-token", data.token);
       }
     } catch (error) {
       console.log(error);
@@ -291,9 +314,9 @@ export default function AdminLogin() {
             </p>
           </form>
         </div>
-      ) : (
+      ) : isAdmin ? (
         <div className="reg-card">
-          <h2 className="reg-title">Sign In</h2>
+          <h2 className="reg-title">Admin Sign In</h2>
 
           {loginMessage && (
             <div
@@ -337,19 +360,86 @@ export default function AdminLogin() {
             <button type="submit" className="reg-btn" disabled={submitting}>
               {loggginIn ? "Signing In..." : "Sign In"}
             </button>
-            {/* <p className="text-center my-2">
-              Not Signed in? Click here
+            <p className="text-center my-2">
+              Officer login?
               <span
                 onClick={() => {
-                  setIsLogin(false);
+                  setIsAdmin(false);
                 }}
                 className="fw-bold"
                 style={{ color: "#b50707", cursor: "pointer" }}
               >
                 {" "}
-                Register
+                Officer
               </span>
-            </p> */}
+            </p>
+          </form>
+        </div>
+      ) : (
+        <div className="reg-card">
+          <h2 className="reg-title">Officer Sign In</h2>
+
+          {loginMessage && (
+            <div
+              className={`reg-msg ${
+                loginMessage.type === "error" ? "error" : "success"
+              }`}
+            >
+              {loginMessage.text}
+            </div>
+          )}
+
+          <form onSubmit={handleSignin} className="reg-form" noValidate>
+            <label>
+              Username
+              <input
+                value={officerLoginUsername}
+                onChange={(e) => setOfficerLoginUsername(e.target.value)}
+                type="text"
+                placeholder="Enter Username"
+                className={
+                  errors.officerLoginUsername ? "input error-input" : "input"
+                }
+              />
+              {errors.officerLoginUsername && (
+                <small className="error-text">
+                  {errors.officerLoginUsername}
+                </small>
+              )}
+            </label>
+
+            <label>
+              Password
+              <input
+                value={officerPassword}
+                onChange={(e) => setOfficerPassword(e.target.value)}
+                type="password"
+                placeholder="Enter password"
+                className={
+                  errors.officerPassword ? "input error-input" : "input"
+                }
+              />
+              {errors.officerPassword && (
+                <small className="error-text">{errors.officerPassword}</small>
+              )}
+            </label>
+
+            <button type="submit" className="reg-btn" disabled={submitting}>
+              {loggginIn ? "Signing In..." : "Sign In"}
+            </button>
+            <p className="text-center my-2">
+              Admin login?
+              <span
+                onClick={() => {
+                  setIsAdmin(true);
+                }}
+                className="fw-bold"
+                style={{ color: "#b50707", cursor: "pointer" }}
+              >
+                {" "}
+                Admin
+              </span>
+            </p>
           </form>
         </div>
       )}
