@@ -12,7 +12,7 @@ function OfficerSidebar() {
           className={({ isActive }) =>
             isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
           }
-          to="/admin/dashboard"
+          to="/officer/dashboard"
         >
           <li>Dashboard</li>
         </NavLink>
@@ -21,7 +21,7 @@ function OfficerSidebar() {
           className={({ isActive }) =>
             isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
           }
-          to="/admin/users"
+          to="/officer/users"
         >
           <li>Users</li>
         </NavLink>
@@ -30,7 +30,7 @@ function OfficerSidebar() {
           className={({ isActive }) =>
             isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
           }
-          to="/admin/complaints"
+          to="/officer/complaints"
         >
           <li>Complaints</li>
         </NavLink>

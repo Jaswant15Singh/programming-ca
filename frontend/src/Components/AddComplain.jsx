@@ -11,7 +11,6 @@ const AddComplain = ({ adding, user_id }) => {
     const files = Array.from(e.target.files);
 
     if (files.length > 0) {
-      // Add new files to existing images
       setImages((prevImages) => [...prevImages, ...files]);
 
       const newPreviews = files.map((file) => URL.createObjectURL(file));
@@ -20,10 +19,8 @@ const AddComplain = ({ adding, user_id }) => {
   };
 
   const removeImage = (index) => {
-    // Remove from images array
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
 
-    // Revoke the preview URL and remove from previews
     URL.revokeObjectURL(imagePreviews[index]);
     setImagePreviews((prevPreviews) =>
       prevPreviews.filter((_, i) => i !== index)
@@ -46,7 +43,7 @@ const AddComplain = ({ adding, user_id }) => {
     setIsSubmitting(true);
 
     const formData = new FormData();
-    formData.append("complaint", complaintName); // Changed from "complaint_name" to "complaint"
+    formData.append("complaint", complaintName);
 
     images.forEach((image) => {
       formData.append("complaint_images", image);
@@ -118,7 +115,6 @@ const AddComplain = ({ adding, user_id }) => {
                   className="file-input"
                 />
                 <label htmlFor="complaint_images" className="file-label">
-                  {/* Changed from htmlFor="images" to htmlFor="complaint_images" */}
                   <span className="upload-icon">📷</span>
                   <span className="upload-text">Click to upload images</span>
                   <span className="upload-subtext">or drag and drop</span>

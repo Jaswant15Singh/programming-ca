@@ -9,6 +9,8 @@ export default function ZoneAdd({
   editingId,
   editingName,
   setEditingId,
+  fetching,
+  setFetching,
 }) {
   const [name, setName] = useState("");
   const [errors, setErrors] = useState({});
@@ -68,6 +70,7 @@ export default function ZoneAdd({
           text: data.message || "Created successfully.",
         });
         setName("");
+        setFetching(!fetching);
       }
     } catch (err) {
       console.error(err);

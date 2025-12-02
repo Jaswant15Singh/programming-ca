@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../stylesheet/UserComplaints.css";
 import UserSidebar from "../Components/UserSidebar";
 import UserTopbar from "../Components/UserTopbar";
+import AddComplain from "../Components/AddComplain";
 ("../Components/AdminDashboard");
 const UserComplaints = ({ user_id }) => {
   const [complaints, setComplaints] = useState([]);
@@ -14,18 +15,20 @@ const UserComplaints = ({ user_id }) => {
       `http://localhost:5000/complaint/get-complaints-by-user/${user_id}`
     );
     const data = await res.json();
+    console.log(data);
+
     setComplaints(data);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedImages, setSelectedImages] = useState(null);
+  const [adding, setAdding] = useState(false);
   const itemsPerPage = 5;
 
   const totalPages = Math.ceil(complaints.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentComplaints = complaints.slice(startIndex, endIndex);
-  console.log(currentComplaints);
 
   const goToPage = (page) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
@@ -40,6 +43,17 @@ const UserComplaints = ({ user_id }) => {
         <div className="dashboard">
           <div className="complaints-container">
             <div className="complaints-wrapper">
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setAdding((prev) => !prev);
+                }}
+              >
+                Add Complain
+              </button>
+              <br />
+              <br />
+              <AddComplain adding={adding} user_id={user_id} />
               <h1 className="complaints-title">My Complaints</h1>
 
               <div className="complaints-list">
@@ -67,7 +81,10 @@ const UserComplaints = ({ user_id }) => {
                         {complaint.complaint_images.map((img, idx) => (
                           <img
                             key={idx}
-                            src={img}
+                            src={`http://localhost:5000/${img.replace(
+                              "public",
+                              ""
+                            )}`}
                             alt={`Complaint ${complaint.id} - Image ${idx + 1}`}
                             className="complaint-thumbnail"
                             onClick={() =>

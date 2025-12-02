@@ -6,7 +6,7 @@ import AdminTopbar from "../Components/AdminTopbar";
 import "../stylesheet/AdminDashboard.css";
 import ZoneAdd from "../Components/ZoneAdd";
 import OfficerAdd from "../Components/OfficerAdd";
-import ComplainAdd from "../Components/ComplainAdd";
+import ComplainAdd from "../Components/UpdateComplain";
 
 const Complaints = () => {
   const [users, setUsers] = useState([]);

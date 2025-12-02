@@ -14,10 +14,11 @@ const Zones = () => {
   const [isAdding, setIsAdding] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState("");
+  const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetching]);
 
   async function fetchUsers() {
     const res = await fetch("http://localhost:5000/admin/get-zones");
@@ -61,6 +62,8 @@ const Zones = () => {
               editingId={editingId}
               editingName={editingName}
               setEditingId={setEditingId}
+              fetching={fetching}
+              setFetching={setFetching}
             />
 
             <button
