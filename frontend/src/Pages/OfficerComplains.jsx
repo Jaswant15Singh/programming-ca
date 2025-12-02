@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 import AdminSidebar from "../Components/AdminSidebar";
 import AdminTopbar from "../Components/AdminTopbar";
 import "../stylesheet/AdminDashboard.css";
 import ComplainAdd from "../Components/UpdateComplain";
+import OfficerSidebar from "../Components/OfficerSidebar";
 
 const OfficerComplains = () => {
   const [users, setUsers] = useState([]);
@@ -28,9 +30,21 @@ const OfficerComplains = () => {
   }, []);
 
   async function fetchUsers() {
-    const res = await fetch("http://localhost:5000/complaint/get-complaints");
+    const token = localStorage.getItem("officer-token");
+    const officer_id = jwtDecode(token).officer_id;
+    const res = await fetch(
+      "http://localhost:5000/officer/complaints-by-officers",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ officer_id }),
+      }
+    );
     const data = await res.json();
-    setUsers(data);
+    setUsers(data.data);
+    console.log(data.data);
   }
 
   const lastIndex = currentPage * recordsPerPage;
@@ -56,7 +70,7 @@ const OfficerComplains = () => {
   return (
     <>
       <div className="admin-container">
-        <AdminSidebar />
+        <OfficerSidebar />
         <div className="main-content">
           <AdminTopbar />
 
@@ -67,14 +81,14 @@ const OfficerComplains = () => {
               complaintId={selectedComplaintId}
               onSuccess={handleAssignSuccess}
             />
-            <button
+            {/* <button
               className="btn btn-primary"
               onClick={() => {
                 setShowForm(!showForm);
               }}
             >
               Add Officer
-            </button>
+            </button> */}
             <br />
             <br />
             <h2 className="mb-3">All Complaints</h2>
@@ -85,6 +99,7 @@ const OfficerComplains = () => {
                   <th>#</th>
                   <th>Complaint</th>
                   <th>User</th>
+                  <th>Images</th>
                   <th>Status</th>
                   <th>Complaint date</th>
                   <th>Update</th>
@@ -97,6 +112,20 @@ const OfficerComplains = () => {
                     <td>{firstIndex + i + 1}</td>
                     <td>{u.complaint}</td>
                     <td>{u.user_name}</td>
+                    <td style={{ maxHeight: "100px", overflowY: "scroll" }}>
+                      {u.complaint_images.map((e) => (
+                        <img
+                          src={`http://localhost:5000/${e}`.replace(
+                            "/public",
+                            ""
+                          )}
+                          height="100px"
+                          width="100px"
+                          alt={e}
+                          style={{ display: "block" }}
+                        />
+                      ))}
+                    </td>
                     <td>{u.status}</td>
                     <td>{u.complaint_date}</td>
                     <td>
