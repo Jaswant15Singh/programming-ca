@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "../stylesheet/UserLogin.css";
 import HomeHeader from "../Components/HomeHeader";
 export default function OfficerAdd({
@@ -11,6 +11,7 @@ export default function OfficerAdd({
   editingAddress,
   editingEmail,
   editingContact,
+  editingUsername,
   setEditingId,
   fetching,
   setFetching,
@@ -24,13 +25,34 @@ export default function OfficerAdd({
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+  console.log(isAdding);
 
   useEffect(() => {
-    setName(editingName);
-    setAddress(editingAddress);
-    setEmail(editingEmail);
-    setContact(editingContact);
-  }, [editingName, isAdding]);
+    if (isAdding) {
+      setName("");
+      setAddress("");
+      setEmail("");
+      setContact("");
+      setUsername("");
+      setPassword("");
+      setErrors({});
+    } else {
+      setName(editingName || "");
+      setAddress(editingAddress || "");
+      setEmail(editingEmail || "");
+      setContact(editingContact || "");
+      setUsername(editingUsername || "");
+      setPassword("");
+      setErrors({});
+    }
+  }, [
+    isAdding,
+    editingName,
+    editingAddress,
+    editingEmail,
+    editingContact,
+    editingUsername,
+  ]);
 
   const validate = () => {
     const e = {};
@@ -52,12 +74,6 @@ export default function OfficerAdd({
     }
 
     if (!username.trim()) e.username = "Username is required.";
-
-    if (!password) {
-      e.password = "Password is required.";
-    } else if (password.length < 1) {
-      e.password = "Password is required.";
-    }
 
     return e;
   };
@@ -120,7 +136,7 @@ export default function OfficerAdd({
     } finally {
       setSubmitting(false);
       setEditingId(null);
-      setIsAdding(true);
+      !isAdding ? setIsAdding(true) : "";
       setTimeout(() => {
         setMessage(null);
       }, 3000);
@@ -149,6 +165,13 @@ export default function OfficerAdd({
           }}
           onClick={() => {
             setShowForm(!showForm);
+            setName("");
+            setAddress("");
+            setEmail("");
+            setContact("");
+            setUsername("");
+            setPassword("");
+            setIsAdding(true);
           }}
         >
           &#10060;
@@ -231,6 +254,7 @@ export default function OfficerAdd({
                   type="text"
                   placeholder="Choose a username"
                   className={errors.username ? "input error-input" : "input"}
+                  disabled={!isAdding}
                 />
                 {errors.username && (
                   <small className="error-text">{errors.username}</small>
@@ -246,6 +270,7 @@ export default function OfficerAdd({
                   type="password"
                   placeholder="Enter password"
                   className={errors.password ? "input error-input" : "input"}
+                  disabled={!isAdding}
                 />
                 {errors.password && (
                   <small className="error-text">{errors.password}</small>
