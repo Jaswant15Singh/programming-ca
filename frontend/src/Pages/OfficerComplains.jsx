@@ -11,19 +11,8 @@ import OfficerSidebar from "../Components/OfficerSidebar";
 const OfficerComplains = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showForm, setShowForm] = useState(false);
-  const [showAssignForm, setShowAssignForm] = useState(false);
-  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
+  const [off_id, setOff_id] = useState(null);
   const recordsPerPage = 5;
-
-  const handleAssignClick = (complaintId) => {
-    setSelectedComplaintId(complaintId);
-    setShowAssignForm(true);
-  };
-
-  const handleAssignSuccess = () => {
-    fetchUsers();
-  };
 
   useEffect(() => {
     fetchUsers();
@@ -32,6 +21,7 @@ const OfficerComplains = () => {
   async function fetchUsers() {
     const token = localStorage.getItem("officer-token");
     const officer_id = jwtDecode(token).officer_id;
+    setOff_id(officer_id);
     const res = await fetch(
       "http://localhost:5000/officer/complaints-by-officers",
       {
@@ -75,12 +65,6 @@ const OfficerComplains = () => {
           <AdminTopbar />
 
           <div className="dashboard">
-            <ComplainAdd
-              showForm={showAssignForm}
-              setShowForm={setShowAssignForm}
-              complaintId={selectedComplaintId}
-              onSuccess={handleAssignSuccess}
-            />
             {/* <button
               className="btn btn-primary"
               onClick={() => {
@@ -131,7 +115,31 @@ const OfficerComplains = () => {
                     <td>
                       <button
                         className="btn btn-primary"
-                        onClick={() => handleAssignClick(u.complaint_id)}
+                        onClick={async () => {
+                          const isConfirm = confirm("Are you sure?");
+                          if (isConfirm) {
+                            try {
+                              const result = await fetch(
+                                "http://localhost:5000/officer/update-complaints-by-officers",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    officer_id: off_id,
+                                    complaint_id: u.complaint_id,
+                                  }),
+                                }
+                              );
+                              const data = await result.json();
+                              alert(data.message);
+                            } catch (error) {
+                              console.log(error);
+                              alert(error.message);
+                            }
+                          }
+                        }}
                       >
                         Update
                       </button>

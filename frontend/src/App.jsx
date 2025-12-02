@@ -7,7 +7,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Admin from "./Pages/Admin";
 import AdminUserData from "./Pages/AdminUserData";
 import Zones from "./Pages/Zones";
-import Offficer from "./Pages/Officer";
+import OffficerAdmin from "./Pages/OfficerAdmin";
+import Complaints from "./Pages/Complaints";
+import Users from "./Pages/Users";
+import UserComplaints from "./Pages/UserComplaints";
+import UserProfile from "./Pages/UserProfile";
+import Officer from "./Pages/Officer";
+import OfficerComplains from "./Pages/OfficerComplains";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("admin-token");
@@ -27,6 +33,8 @@ function ProtectedRoute({ children }) {
   }
 }
 function App() {
+  const token = localStorage.getItem("user-token");
+  const jwt = jwtDecode(token);
   return (
     <BrowserRouter>
       <Routes>
@@ -36,11 +44,21 @@ function App() {
         <Route exact path="/admin/dashboard" element={<Admin />} />
         <Route exact path="/admin/users" element={<AdminUserData />} />
         <Route exact path="/admin/zones" element={<Zones />} />
-        <Route exact path="/admin/officer" element={<Offficer />} />
+        <Route exact path="/admin/officer" element={<OffficerAdmin />} />
+        <Route exact path="/admin/complaints" element={<Complaints />} />
+        <Route exact path="/resident/dashboard" element={<Users />} />
         <Route
           exact
-          path="/resident/dashboard"
-          element={<>Resident Dashboard</>}
+          path="/resident/complaints"
+          element={<UserComplaints user_id={jwt.user_id} />}
+        />
+        <Route exact path="/resident/profile" element={<UserProfile />} />
+        <Route exact path="/admin/dashboard" element={<Admin />} />
+        <Route exact path="/officer/dashboard" element={<Officer />} />
+        <Route
+          exact
+          path="/officer/complaints"
+          element={<OfficerComplains />}
         />
       </Routes>
     </BrowserRouter>
