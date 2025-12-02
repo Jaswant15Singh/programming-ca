@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import "../stylesheet/AdminDashboard.css";
 
 function OfficerDashboard() {
   const [users, setUsers] = useState([]);
-  const [zones, setZones] = useState([]);
-  const [officers, setOfficers] = useState([]);
-  const [complaints, setComplaints] = useState([]);
 
   useEffect(() => {
     getAllData();
   }, []);
 
   async function getAllData() {
-    const result = await Promise.all(
-      [
-        "http://localhost:5000/users/get-users",
-        "http://localhost:5000/complaint/get-complaints",
-        "http://localhost:5000/admin/get-zones",
-        "http://localhost:5000/admin/get-all-officers",
-      ].map(async (e) => {
-        const result = await fetch(e);
-        const data = await result.json();
-        return data;
-      })
-    );
+    const token = localStorage.getItem("officer-token");
+    const officer_id = jwtDecode(token).officer_id;
+    console.log(officer_id);
 
-    setUsers(result[0]);
-    setComplaints(result[1]);
-    setZones(result[2]);
-    setOfficers(result[3]);
+    const data = await fetch(
+      "http://localhost:5000/officer/complaints-by-officers",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ officer_id }),
+      }
+    );
+    const result = await data.json();
+    console.log(result);
+
+    setUsers(result.data);
   }
+
   return (
     <div className="dashboard">
       <h1>Dashboard Overview</h1>
