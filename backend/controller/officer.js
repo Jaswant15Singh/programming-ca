@@ -1,3 +1,5 @@
+const { executeQuery } = require("../utils/db");
+
 const updateOfficer = async (req, res) => {
   const { officer_id } = req.params;
   const { officer_name, officer_address, officer_email, officer_contact } =
@@ -16,8 +18,7 @@ const updateOfficer = async (req, res) => {
        SET officer_name = $1,
            officer_address = $2,
            officer_email = $3,
-           officer_contact = $4,
-           updated_date = NOW()
+           officer_contact = $4
        WHERE officer_id = $5
        RETURNING *`,
       [
@@ -50,4 +51,27 @@ const updateOfficer = async (req, res) => {
   }
 };
 
-module.exports = { updateOfficer };
+const getComplantsByUsers = async (req, res) => {
+  try {
+    const { officer_id } = req.body;
+    const result = await executeQuery(
+      `select * from users_def ud 
+inner join complaint_def cd on ud.user_id =cd.user_id
+inner join officer_def od on od.officer_id =cd.assigned_officer where od.officer_id=$1`,
+      [officer_id]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "No complaints",
+        success: false,
+      });
+    }
+    res.status(500).json(result.rows);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error",
+      success: false,
+    });
+  }
+};
+module.exports = { updateOfficer, getComplantsByUsers };
