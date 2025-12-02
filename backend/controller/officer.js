@@ -64,9 +64,10 @@ inner join officer_def od on od.officer_id =cd.assigned_officer where od.officer
       return res.status(404).json({
         message: "No complaints",
         success: false,
+        data: [],
       });
     }
-    res.status(500).json(result.rows);
+    res.status(200).json({ data: result.rows });
   } catch (error) {
     res.status(500).json({
       message: "Server Error",
@@ -74,4 +75,26 @@ inner join officer_def od on od.officer_id =cd.assigned_officer where od.officer
     });
   }
 };
-module.exports = { updateOfficer, getComplantsByUsers };
+
+const updateComplaintStatusByOfficer = async (req, res) => {
+  try {
+    const { complaint_id, officer_id } = req.body;
+    const result = await executeQuery(
+      `UPDATE complaint_def set status="resolved" where complaint_id=$1 
+        and assigned_officer=$2`,
+      [complaint_id, officer_id]
+    );
+
+    res.status(200).json({ message: "Status has been updated", success: true });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error",
+      success: false,
+    });
+  }
+};
+module.exports = {
+  updateOfficer,
+  getComplantsByUsers,
+  updateComplaintStatusByOfficer,
+};
