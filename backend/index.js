@@ -7,18 +7,16 @@ const dotenv = require("dotenv").config();
 const users = require("./router/users");
 const admin = require("./router/admin");
 const complaint = require("./router/complaint");
+const officer = require("./router/officer");
 app.use(express.static("public"));
 app.use(express.json());
-
-// console.log(express.static("./index.js"));
-
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     PORT: 5173,
   })
 );
 app.use((req, res, next) => {
-  console.log("next working");
   next();
 });
 app.use(
@@ -32,8 +30,10 @@ app.use(
 
 app.use("/users", users);
 app.use("/admin", admin);
+app.use("/officer", officer);
 app.use("/complaint", complaint);
-app.use((req, res, err, next) => {
+app.use((err, req, res, next) => {
+  console.error(err.stack);
   res.status(500).json({ success: false, message: err.message });
 });
 app.listen(5000, () => {

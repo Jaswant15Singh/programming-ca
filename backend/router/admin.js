@@ -7,6 +7,7 @@ const {
   updateAdmin,
   deleteAdmin,
   createOfficer,
+  officerLogin,
   createZone,
   updateZone,
   getAllOfficers,
@@ -19,6 +20,7 @@ router.post("/admin-login", adminLogin);
 router.put("/update-admin/:id", updateAdmin);
 router.delete("/delete-admin", deleteAdmin);
 router.post("/create-officer", createOfficer);
+router.post("/officer-login", officerLogin);
 router.get("/get-zones", getZones);
 router.post("/create-zone", createZone);
 router.put("/update-zone/:zone_id", updateZone);
