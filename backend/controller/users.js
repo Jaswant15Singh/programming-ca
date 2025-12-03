@@ -5,7 +5,6 @@ const upload = require("../utils/multer");
 const getUsers = async (req, res) => {
   try {
     const data = await executeQuery("select * from users_def");
-    console.log(data.rows[0]);
     res.json(data.rows);
   } catch (error) {
     console.log(error);
@@ -80,6 +79,7 @@ const userLogin = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid password" });
     }
+    req.session.user = user;
 
     const token = jwt.sign(
       { user_id: user.user_id, username: user.login_username },
@@ -105,16 +105,8 @@ const userLogin = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const user_id = req.params.id;
-
-    const {
-      user_name,
-      user_address,
-      user_email,
-      user_contact,
-      login_username,
-      password,
-    } = req.body;
+    const { user_name, user_address, user_email, user_contact, user_id } =
+      req.body;
 
     const checkQuery = "SELECT * FROM users_def WHERE user_id = $1";
     const checkResult = await executeQuery(checkQuery, [user_id]);
@@ -123,33 +115,23 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let hashedPassword = checkResult.rows[0].password;
+    // let hashedPassword = checkResult.rows[0].password;
 
-    if (password && password.trim() !== "") {
-      hashedPassword = await bcrypt.hash(password, 10);
-    }
+    // if (password && password.trim() !== "") {
+    //   hashedPassword = await bcrypt.hash(password, 10);
+    // }
 
     const query = `
        UPDATE users_def SET
          user_name = $1,
          user_address = $2,
          user_email = $3,
-         user_contact = $4,
-         login_username = $5,
-         password = $6
-       WHERE user_id = $7
+         user_contact = $4
+       WHERE user_id = $5
        RETURNING user_id, user_name, user_email, login_username
      `;
 
-    const values = [
-      user_name,
-      user_address,
-      user_email,
-      user_contact,
-      login_username,
-      hashedPassword,
-      user_id,
-    ];
+    const values = [user_name, user_address, user_email, user_contact, user_id];
 
     const result = await executeQuery(query, values);
 
@@ -163,4 +145,17 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, addUser, updateUser, userLogin };
+const getUserProfile = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const result = await executeQuery(
+      "Select * from users_def where user_id=$1",
+      [user_id]
+    );
+    res.status(200).json({ success: true, data: result.rows[0] });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", success: false });
+  }
+};
+
+module.exports = { getUsers, addUser, updateUser, userLogin, getUserProfile };
