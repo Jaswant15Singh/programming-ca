@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../stylesheet/AddComplain.css";
 
 const AddComplain = ({ adding, user_id }) => {
   const [complaintName, setComplaintName] = useState("");
   const [images, setImages] = useState([]);
+  const [zone, setZone] = useState(null);
+  const [zone_name, setZoneName] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [address, setAddress] = useState("");
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -27,6 +30,19 @@ const AddComplain = ({ adding, user_id }) => {
     );
   };
 
+  useEffect(() => {
+    getZone();
+  }, []);
+
+  const getZone = async () => {
+    try {
+      const result = await fetch("http://localhost:5000/admin/get-zones");
+      const data = await result.json();
+      setZone(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -49,6 +65,11 @@ const AddComplain = ({ adding, user_id }) => {
       formData.append("complaint_images", image);
     });
     formData.append("user_id", user_id);
+    formData.append("zone_name", zone_name);
+    formData.append("address", address);
+
+    console.log(zone);
+
     formData.entries().forEach((e) => {
       console.log(e);
     });
@@ -100,7 +121,39 @@ const AddComplain = ({ adding, user_id }) => {
                 required
               />
             </div>
-
+            <div className="form-group">
+              <label htmlFor="zone" className="form-label">
+                Zone
+              </label>
+              <select
+                name="zone_name"
+                id="zone_name"
+                className="file-control"
+                onChange={(e) => {
+                  setZoneName(e.target.value);
+                }}
+              >
+                {zone.map((e) => (
+                  <option value={e.zone_id} key={e.zone_id}>
+                    {e.zone_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="address" className="form-label">
+                Address
+              </label>
+              <textarea
+                type="text"
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="form-input"
+                placeholder="Enter address "
+                required
+              ></textarea>
+            </div>
             <div className="form-group">
               <label htmlFor="complaint_images" className="form-label">
                 Upload Images
