@@ -6,6 +6,7 @@ export default function ComplainAdd({
   setShowForm,
   complaintId,
   onSuccess,
+  currentOfficerId,
 }) {
   const [selectedOfficer, setSelectedOfficer] = useState("");
   const [officerList, setOfficerList] = useState([]);
@@ -15,9 +16,15 @@ export default function ComplainAdd({
   useEffect(() => {
     if (showForm) {
       fetchOfficers();
+      if (currentOfficerId) {
+        setSelectedOfficer(currentOfficerId);
+      } else {
+        setSelectedOfficer("");
+      }
+    } else {
+      setSelectedOfficer("");
     }
-  }, [showForm]);
-
+  }, [showForm, currentOfficerId]);
   const fetchOfficers = async () => {
     try {
       const res = await fetch("http://localhost:5000/admin/get-all-officers");

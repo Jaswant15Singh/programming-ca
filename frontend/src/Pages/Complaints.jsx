@@ -14,11 +14,32 @@ const Complaints = () => {
   const [showForm, setShowForm] = useState(false);
   const [showAssignForm, setShowAssignForm] = useState(false);
   const [selectedComplaintId, setSelectedComplaintId] = useState(null);
+  const [currentOfficerId, setCurrentOfficerId] = useState(null);
   const recordsPerPage = 5;
 
-  const handleAssignClick = (complaintId) => {
-    setSelectedComplaintId(complaintId);
+  const handleAssignClick = async (complaint) => {
+    setSelectedComplaintId(complaint.complaint_id);
     setShowAssignForm(true);
+    try {
+      const result = await fetch(
+        "http://localhost:5000/complaint/get-single-comment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ complaint_id: complaint.complaint_id }),
+        }
+      );
+      const data = await result.json();
+      console.log(data.result.assigned_officer);
+
+      setCurrentOfficerId(data.result.assigned_officer);
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleAssignSuccess = () => {
@@ -68,6 +89,7 @@ const Complaints = () => {
               setShowForm={setShowAssignForm}
               complaintId={selectedComplaintId}
               onSuccess={handleAssignSuccess}
+              currentOfficerId={currentOfficerId}
             />
             <button
               className="btn btn-primary"
@@ -87,6 +109,8 @@ const Complaints = () => {
                   <th>#</th>
                   <th>Complaint</th>
                   <th>User</th>
+                  <th>Complaint Address</th>
+                  <th>Zone name</th>
                   <th>Status</th>
                   <th>Complaint date</th>
                   <th>Update</th>
@@ -99,12 +123,16 @@ const Complaints = () => {
                     <td>{firstIndex + i + 1}</td>
                     <td>{u.complaint}</td>
                     <td>{u.user_name}</td>
+                    <td>{u.complaint_address}</td>
+                    <td>{u.zone_name}</td>
                     <td>{u.status}</td>
                     <td>{u.complaint_date}</td>
                     <td>
                       <button
                         className="btn btn-primary"
-                        onClick={() => handleAssignClick(u.complaint_id)}
+                        onClick={() => {
+                          handleAssignClick(u);
+                        }}
                       >
                         Update
                       </button>
