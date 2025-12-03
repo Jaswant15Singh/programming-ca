@@ -7,10 +7,10 @@ const UserProfile = ({ user_id }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState({
-    name: "",
-    email: "",
-    contact: "",
-    address: "",
+    user_name: "",
+    user_email: "",
+    user_contact: "",
+    user_address: "",
   });
   const [originalData, setOriginalData] = useState({});
 
@@ -26,10 +26,11 @@ const UserProfile = ({ user_id }) => {
         `http://localhost:5000/users/profile/${user_id}`
       );
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
-        setProfileData(data);
-        setOriginalData(data);
+        setProfileData(data.data);
+        setOriginalData(data.data);
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -40,6 +41,8 @@ const UserProfile = ({ user_id }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(e.target.value);
+
     setProfileData((prev) => ({
       ...prev,
       [name]: value,
@@ -57,19 +60,16 @@ const UserProfile = ({ user_id }) => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/users/update-profile`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id,
-            ...profileData,
-          }),
-        }
-      );
+      const response = await fetch(`http://localhost:5000/users/update-user`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id,
+          ...profileData,
+        }),
+      });
 
       if (response.ok) {
         alert("Profile updated successfully!");
@@ -120,11 +120,11 @@ const UserProfile = ({ user_id }) => {
                   <div className="avatar-wrapper">
                     <div className="avatar-ring"></div>
                     <div className="avatar-content">
-                      {profileData.name.charAt(0).toUpperCase()}
+                      {profileData.user_name.charAt(0).toUpperCase()}
                     </div>
                   </div>
                   <div className="profile-name-section">
-                    <h1 className="profile-name">{profileData.name}</h1>
+                    <h1 className="profile-name">{profileData.user_name}</h1>
                     <p className="profile-subtitle">Member Profile</p>
                   </div>
                 </div>
@@ -153,14 +153,14 @@ const UserProfile = ({ user_id }) => {
                       {isEditing ? (
                         <input
                           type="text"
-                          name="name"
-                          value={profileData.name}
+                          name="user_name"
+                          value={profileData.user_name}
                           onChange={handleChange}
                           className="detail-input"
                           placeholder="Enter your name"
                         />
                       ) : (
-                        <p className="detail-value">{profileData.name}</p>
+                        <p className="detail-value">{profileData.user_name}</p>
                       )}
                     </div>
                   </div>
@@ -175,14 +175,14 @@ const UserProfile = ({ user_id }) => {
                       {isEditing ? (
                         <input
                           type="email"
-                          name="email"
-                          value={profileData.email}
+                          name="user_email"
+                          value={profileData.user_email}
                           onChange={handleChange}
                           className="detail-input"
                           placeholder="Enter your email"
                         />
                       ) : (
-                        <p className="detail-value">{profileData.email}</p>
+                        <p className="detail-value">{profileData.user_email}</p>
                       )}
                     </div>
                   </div>
@@ -197,14 +197,16 @@ const UserProfile = ({ user_id }) => {
                       {isEditing ? (
                         <input
                           type="tel"
-                          name="contact"
-                          value={profileData.contact}
+                          name="user_contact"
+                          value={profileData.user_contact}
                           onChange={handleChange}
                           className="detail-input"
                           placeholder="Enter your contact"
                         />
                       ) : (
-                        <p className="detail-value">{profileData.contact}</p>
+                        <p className="detail-value">
+                          {profileData.user_contact}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -218,15 +220,17 @@ const UserProfile = ({ user_id }) => {
                       <label className="detail-label">Address</label>
                       {isEditing ? (
                         <textarea
-                          name="address"
-                          value={profileData.address}
+                          name="user_address"
+                          value={profileData.user_address}
                           onChange={handleChange}
                           className="detail-textarea"
                           placeholder="Enter your address"
                           rows="3"
                         />
                       ) : (
-                        <p className="detail-value">{profileData.address}</p>
+                        <p className="detail-value">
+                          {profileData.user_address}
+                        </p>
                       )}
                     </div>
                   </div>
