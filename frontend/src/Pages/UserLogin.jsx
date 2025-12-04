@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../stylesheet/UserLogin.css";
 import HomeHeader from "../Components/HomeHeader";
+import { useNavigate } from "react-router-dom";
 export default function UserLogin() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -16,7 +17,7 @@ export default function UserLogin() {
   const [message, setMessage] = useState(null);
   const [loginMessage, setLoginMessage] = useState(null);
   const [loggginIn, setLoggingIn] = useState(false);
-
+  const navigate = useNavigate();
   const validate = () => {
     const e = {};
     if (!name.trim()) e.name = "Name is required.";
@@ -150,6 +151,7 @@ export default function UserLogin() {
         });
         console.log(data);
         localStorage.setItem("user-token", data.token);
+        navigate("/resident/dashboard");
       }
     } catch (error) {
       console.log(error);

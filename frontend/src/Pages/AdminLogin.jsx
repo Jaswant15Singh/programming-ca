@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../stylesheet/UserLogin.css";
 import HomeHeader from "../Components/HomeHeader";
+import { useNavigate } from "react-router-dom";
 export default function AdminLogin() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -19,6 +20,7 @@ export default function AdminLogin() {
   const [message, setMessage] = useState(null);
   const [loginMessage, setLoginMessage] = useState(null);
   const [loggginIn, setLoggingIn] = useState(false);
+  const navigate = useNavigate("");
 
   const validate = () => {
     const e = {};
@@ -173,6 +175,7 @@ export default function AdminLogin() {
         isAdmin
           ? localStorage.setItem("admin-token", data.token)
           : localStorage.setItem("officer-token", data.token);
+        isAdmin ? navigate("/admin/dashboard") : navigate("/officer/dashboard");
       }
     } catch (error) {
       console.log(error);
