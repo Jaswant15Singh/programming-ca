@@ -12,8 +12,6 @@ function OfficerDashboard() {
   async function getAllData() {
     const token = localStorage.getItem("officer-token");
     const officer_id = jwtDecode(token).officer_id;
-    console.log(officer_id);
-
     const data = await fetch(
       "http://localhost:5000/officer/complaints-by-officers",
       {

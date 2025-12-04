@@ -1,8 +1,10 @@
 import React from "react";
 import "../stylesheet/AdminSidebar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function AdminSidebar() {
+  const navigate = useNavigate("");
+
   return (
     <div className="sidebar">
       <h2 className="sidebar-logo">AdminPanel</h2>
@@ -53,7 +55,14 @@ function AdminSidebar() {
           <li>Complaints</li>
         </NavLink>
 
-        <li>Settings</li>
+        <li
+          onClick={() => {
+            localStorage.removeItem("admin-token");
+            navigate("/");
+          }}
+        >
+          Logout
+        </li>
       </ul>
     </div>
   );
