@@ -57,7 +57,8 @@ const getComplantsByUsers = async (req, res) => {
     const result = await executeQuery(
       `select * from users_def ud 
 inner join complaint_def cd on ud.user_id =cd.user_id
-inner join officer_def od on od.officer_id =cd.assigned_officer where od.officer_id=$1`,
+inner join officer_def od on od.officer_id =cd.assigned_officer
+inner join zones_def zd on zd.zone_id=cd.zone_name where od.officer_id=$1`,
       [officer_id]
     );
     if (result.rowCount === 0) {
@@ -80,9 +81,9 @@ const updateComplaintStatusByOfficer = async (req, res) => {
   try {
     const { complaint_id, officer_id } = req.body;
     const result = await executeQuery(
-      `UPDATE complaint_def set status="resolved" where complaint_id=$1 
+      `UPDATE complaint_def set status=$3 where complaint_id=$1 
         and assigned_officer=$2`,
-      [complaint_id, officer_id]
+      [complaint_id, officer_id, "resolved"]
     );
 
     res.status(200).json({ message: "Status has been updated", success: true });

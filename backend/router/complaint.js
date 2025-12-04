@@ -23,7 +23,7 @@ router.post(
   upload.array("complaint_images", 10),
   addComplaint
 );
-router.get("/get-single-comment", getSingleComplaint);
+router.post("/get-single-comment", getSingleComplaint);
 router.get("/get-all-comments", getAllComments);
 router.post("/add-comment", addComment);
 router.get("/get-comments-on-complaint", getCommentsOnComplaint);

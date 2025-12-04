@@ -2,8 +2,8 @@ const { pool, executeQuery } = require("../utils/db");
 const getComplaint = async (req, res) => {
   try {
     const result =
-      await executeQuery(`select  cd.complaint_id,cd.complaint,cd.complaint_images ,u.user_name,cd.status,cd.complaint_date from complaint_def cd
-inner join users_def  u on u.user_id=cd.user_id`);
+      await executeQuery(`select  cd.complaint_id,cd.complaint,zd.zone_name,cd.complaint_address,cd.complaint_images ,u.user_name,cd.status,cd.complaint_date from complaint_def cd
+inner join users_def  u on u.user_id=cd.user_id inner join zones_def zd on zd.zone_id=cd.zone_name`);
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
@@ -29,7 +29,7 @@ const getComplaintByUsers = async (req, res) => {
 
 const getSingleComplaint = async (req, res) => {
   try {
-    const { complaint_id } = req.params;
+    const { complaint_id } = req.body;
     if (!complaint_id) {
       return res.status(400).json({ message: "Missing Fields" });
     }
@@ -37,16 +37,16 @@ const getSingleComplaint = async (req, res) => {
       "SELECT * FROM complaint_def where complaint_id=$1",
       [complaint_id]
     );
-    res.status(200).json({ result: result.rows });
+    res.status(200).json({ result: result.rows[0] });
   } catch (error) {
     res.status(500).json({ message: "Server Error", success: false });
   }
 };
 const addComplaint = async (req, res) => {
-  console.log(13373737);
-
   try {
-    const { user_id, complaint } = req.body;
+    const { user_id, complaint, zone_name, address } = req.body;
+    console.log(user_id, complaint, zone_name);
+
     const files = req.files;
     if (!files || files.length === 0) {
       return res
@@ -60,8 +60,8 @@ const addComplaint = async (req, res) => {
 
     const imagePaths = files.map((file) => file.path);
     await executeQuery(
-      "INSERT INTO complaint_def (user_id,complaint,complaint_images,status,complaint_date) values ($1,$2,$3,'pending',now())",
-      [user_id, complaint, imagePaths]
+      "INSERT INTO complaint_def (user_id,complaint,complaint_images,status,complaint_date,zone_name,complaint_address) values ($1,$2,$3,'pending',now(),$4,$5)",
+      [user_id, complaint, imagePaths, zone_name, address]
     );
     res
       .status(200)
