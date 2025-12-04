@@ -1,8 +1,15 @@
 const About = () => {
   return (
     <div className="container py-5">
-      <div className="row align-items-center">
-        <div className="col-md-6 mb-4 mb-md-0">
+      <div
+        className=" align-items-center"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          columnGap: "2rem",
+        }}
+      >
+        <div className=" mb-4 mb-md-0">
           <img
             src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg"
             alt="About us"
@@ -10,7 +17,7 @@ const About = () => {
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="">
           <h2 className="fw-bold mb-3">About Us</h2>
           <p className="text-muted">
             Our platform empowers citizens to report local issues such as road

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../stylesheet/AdminDashboard.css";
+import { Link } from "react-router-dom";
 
 function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -35,25 +36,31 @@ function AdminDashboard() {
       <h1>Dashboard Overview</h1>
       {/* Cards */}
       <div className="cards">
-        <div className="card">
-          <h3>Total Users</h3>
-          <p className="value">{users.length}</p>
-        </div>
+        <Link to="/admin/users" className="link">
+          <div className="card">
+            <h3>Total Users</h3>
+            <p className="value">{users.length}</p>
+          </div>
+        </Link>
 
-        <div className="card">
-          <h3>Zones</h3>
-          <p className="value">{zones.length}</p>
-        </div>
-
-        <div className="card">
-          <h3>Officers</h3>
-          <p className="value">{officers.length}</p>
-        </div>
-
-        <div className="card">
-          <h3>Complaints</h3>
-          <p className="value">{complaints.length}</p>
-        </div>
+        <Link to="/admin/zones" className="link">
+          <div className="card">
+            <h3>Zones</h3>
+            <p className="value">{zones.length}</p>
+          </div>
+        </Link>
+        <Link to="/admin/officer" className="link">
+          <div className="card">
+            <h3>Officers</h3>
+            <p className="value">{officers.length}</p>
+          </div>
+        </Link>
+        <Link to="/admin/complaints" className="link">
+          <div className="card">
+            <h3>Complaints</h3>
+            <p className="value">{complaints.length}</p>
+          </div>
+        </Link>
       </div>
 
       {/* <div className="chart-section">

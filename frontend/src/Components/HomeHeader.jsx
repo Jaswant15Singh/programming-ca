@@ -8,7 +8,7 @@ const HomeHeader = () => {
         <div className="header-overlay">
           <div className="header-content">
             <Link className="header-logo link" to="/">
-              My Website
+              CricVoice
             </Link>
 
             <div className="header-buttons">
