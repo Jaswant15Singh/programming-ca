@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+
 import "./App.css";
 import Home from "./Pages/Home";
 import UserLogin from "./Pages/UserLogin";
@@ -15,82 +16,52 @@ import UserProfile from "./Pages/UserProfile";
 import Officer from "./Pages/Officer";
 import OfficerComplains from "./Pages/OfficerComplains";
 
-// Protected Route Component with Role-Based Access Control
-function ProtectedRoute({ children, allowedRoles }) {
-  const getTokenAndRole = () => {
-    // Check for admin token
-    const adminToken = localStorage.getItem("admin-token");
-    if (adminToken) {
-      try {
-        const decoded = jwtDecode(adminToken);
-        return { token: adminToken, decoded, role: "admin" };
-      } catch (e) {
-        console.error("Invalid admin token:", e);
-      }
-    }
+function UserRoute({ children }) {
+  const token = localStorage.getItem("user-token");
 
-    // Check for user token
-    const userToken = localStorage.getItem("user-token");
-    if (userToken) {
-      try {
-        const decoded = jwtDecode(userToken);
-        return { token: userToken, decoded, role: decoded.role || "user" };
-      } catch (e) {
-        console.error("Invalid user token:", e);
-      }
-    }
+  if (!token) return <Navigate to="/" replace />;
 
-    // Check for officer token
-    const officerToken = localStorage.getItem("officer-token");
-    if (officerToken) {
-      try {
-        const decoded = jwtDecode(officerToken);
-        return { token: officerToken, decoded, role: "officer" };
-      } catch (e) {
-        console.error("Invalid officer token:", e);
-      }
-    }
-
-    return null;
-  };
-
-  const auth = getTokenAndRole();
-
-  // No valid token found
-  if (!auth) {
+  try {
+    jwtDecode(token);
+    return children;
+  } catch {
     return <Navigate to="/" replace />;
   }
-
-  // Check if user's role is allowed
-  if (allowedRoles && !allowedRoles.includes(auth.role)) {
-    // Redirect to appropriate dashboard based on role
-    switch (auth.role) {
-      case "admin":
-        return <Navigate to="/admin/dashboard" replace />;
-      case "officer":
-        return <Navigate to="/officer/dashboard" replace />;
-      case "user":
-        return <Navigate to="/resident/dashboard" replace />;
-      default:
-        return <Navigate to="/" replace />;
-    }
-  }
-
-  return children;
 }
 
+function AdminRoute({ children }) {
+  const token = localStorage.getItem("admin-token");
+
+  if (!token) return <Navigate to="/" replace />;
+
+  try {
+    jwtDecode(token);
+    return children;
+  } catch {
+    return <Navigate to="/" replace />;
+  }
+}
+
+function OfficerRoute({ children }) {
+  const token = localStorage.getItem("officer-token");
+
+  if (!token) return <Navigate to="/" replace />;
+
+  try {
+    jwtDecode(token);
+    return children;
+  } catch {
+    return <Navigate to="/" replace />;
+  }
+}
 function App() {
-  // Helper function to get user data safely
   const getUserData = () => {
     try {
       const token = localStorage.getItem("user-token");
-      if (token) {
-        return jwtDecode(token);
-      }
-    } catch (e) {
-      console.error("Error decoding user token:", e);
+      return token ? jwtDecode(token) : null;
+    } catch {
+      return null;
     }
-    return null;
   };
 
   const userData = getUserData();
@@ -103,93 +74,93 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/resident-login" element={<UserLogin />} />
 
-        {/* Admin Protected Routes */}
+        {/* Admin Routes */}
         <Route
           path="/admin/dashboard"
           element={
-            <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminRoute>
               <Admin />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/admin/users"
           element={
-            <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminRoute>
               <AdminUserData />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/admin/zones"
           element={
-            <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminRoute>
               <Zones />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/admin/officer"
           element={
-            <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminRoute>
               <OffficerAdmin />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/admin/complaints"
           element={
-            <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminRoute>
               <Complaints />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
 
-        {/* Resident/User Protected Routes */}
+        {/* User Routes */}
         <Route
           path="/resident/dashboard"
           element={
-            <ProtectedRoute allowedRoles={["user"]}>
+            <UserRoute>
               <Users />
-            </ProtectedRoute>
+            </UserRoute>
           }
         />
         <Route
           path="/resident/complaints"
           element={
-            <ProtectedRoute allowedRoles={["user"]}>
+            <UserRoute>
               <UserComplaints user_id={userData?.user_id} />
-            </ProtectedRoute>
+            </UserRoute>
           }
         />
         <Route
           path="/resident/profile"
           element={
-            <ProtectedRoute allowedRoles={["user"]}>
+            <UserRoute>
               <UserProfile user_id={userData?.user_id} />
-            </ProtectedRoute>
+            </UserRoute>
           }
         />
 
-        {/* Officer Protected Routes */}
+        {/* Officer Routes */}
         <Route
           path="/officer/dashboard"
           element={
-            <ProtectedRoute allowedRoles={["officer"]}>
+            <OfficerRoute>
               <Officer />
-            </ProtectedRoute>
+            </OfficerRoute>
           }
         />
         <Route
           path="/officer/complaints"
           element={
-            <ProtectedRoute allowedRoles={["officer"]}>
+            <OfficerRoute>
               <OfficerComplains />
-            </ProtectedRoute>
+            </OfficerRoute>
           }
         />
 
-        {/* Catch all - redirect to home */}
+        {/* Default Redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
