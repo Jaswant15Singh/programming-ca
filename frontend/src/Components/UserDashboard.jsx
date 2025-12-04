@@ -34,45 +34,6 @@ function UserDashboard() {
           <p className="value">{complaints.length}</p>
         </div>
       </div>
-
-      {/* <div className="chart-section">
-        <div className="chart-box">Chart Placeholder</div>
-        <div className="chart-box">Statistics Placeholder</div>
-      </div>
-
-      <div className="table-section">
-        <h2>Recent Activities</h2>
-
-        <table>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Activity</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>Jaswant</td>
-              <td>Created new report</td>
-              <td>Today</td>
-            </tr>
-
-            <tr>
-              <td>Rohan</td>
-              <td>Updated product details</td>
-              <td>Yesterday</td>
-            </tr>
-
-            <tr>
-              <td>Meera</td>
-              <td>Added new user</td>
-              <td>2 days ago</td>
-            </tr>
-          </tbody>
-        </table>
-      </div> */}
     </div>
   );
 }

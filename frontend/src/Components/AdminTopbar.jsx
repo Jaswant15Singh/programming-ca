@@ -4,7 +4,7 @@ import "../stylesheet/AdminTopbar.css";
 function AdminTopbar() {
   return (
     <div className="topbar">
-      <input className="search-box" placeholder="Search..." />
+      {/* <input className="search-box" placeholder="Search..." />
 
       <div className="topbar-icons">
         <img
@@ -12,7 +12,7 @@ function AdminTopbar() {
           src="https://i.pravatar.cc/40"
           alt="profile"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

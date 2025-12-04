@@ -22,15 +22,6 @@ function OfficerSidebar() {
           className={({ isActive }) =>
             isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
           }
-          to="/officer/users"
-        >
-          <li>Users</li>
-        </NavLink>
-
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
-          }
           to="/officer/complaints"
         >
           <li>Complaints</li>
