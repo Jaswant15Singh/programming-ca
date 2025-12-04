@@ -20,10 +20,15 @@ const OffficerAdmin = () => {
   const [editingContact, setEditingContact] = useState("");
   const [editingUsername, setEditingUsername] = useState("");
   const [fetching, setFetching] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredUsers = users.filter((officer) => {
+    const query = searchQuery.toLowerCase();
+    return officer.officer_name?.toLowerCase().includes(query);
+  });
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetching]);
 
   async function fetchUsers() {
     const res = await fetch("http://localhost:5000/admin/get-all-officers");
@@ -33,9 +38,9 @@ const OffficerAdmin = () => {
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const currentUsers = users.slice(firstIndex, lastIndex);
+  const currentUsers = filteredUsers.slice(firstIndex, lastIndex);
 
-  const totalPages = Math.ceil(users.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
 
   const pageNumbers = [...Array(totalPages + 1).keys()].slice(1);
 
@@ -56,7 +61,20 @@ const OffficerAdmin = () => {
       <div className="admin-container">
         <AdminSidebar />
         <div className="main-content">
-          <AdminTopbar />
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                maxWidth: "500px",
+                padding: "10px",
+                fontSize: "14px",
+              }}
+            />
+          </div>
 
           <div className="dashboard">
             <OfficerAdd

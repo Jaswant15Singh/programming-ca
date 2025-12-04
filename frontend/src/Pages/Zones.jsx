@@ -15,6 +15,11 @@ const Zones = () => {
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState("");
   const [fetching, setFetching] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredUsers = users.filter((zone) => {
+    const query = searchQuery.toLowerCase();
+    return zone.zone_name?.toLowerCase().includes(query);
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -28,9 +33,9 @@ const Zones = () => {
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const currentUsers = users.slice(firstIndex, lastIndex);
+  const currentUsers = filteredUsers.slice(firstIndex, lastIndex);
 
-  const totalPages = Math.ceil(users.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
 
   const pageNumbers = [...Array(totalPages + 1).keys()].slice(1);
 
@@ -51,8 +56,20 @@ const Zones = () => {
       <div className="admin-container">
         <AdminSidebar />
         <div className="main-content">
-          <AdminTopbar />
-
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                maxWidth: "500px",
+                padding: "10px",
+                fontSize: "14px",
+              }}
+            />
+          </div>
           <div className="dashboard">
             <ZoneAdd
               showForm={showForm}
@@ -74,6 +91,9 @@ const Zones = () => {
             >
               Add Zone
             </button>
+            <br />
+            <br />
+
             <h2 className="mb-3">All Users</h2>
 
             <Table striped bordered hover responsive>

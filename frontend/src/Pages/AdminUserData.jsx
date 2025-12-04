@@ -8,7 +8,13 @@ import "../stylesheet/AdminDashboard.css";
 const AdminUserData = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const recordsPerPage = 5;
+
+  const filteredUsers = users.filter((user) => {
+    const query = searchQuery.toLowerCase();
+    return user.user_name?.toLowerCase().includes(query);
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -22,9 +28,9 @@ const AdminUserData = () => {
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const currentUsers = users.slice(firstIndex, lastIndex);
+  const currentUsers = filteredUsers.slice(firstIndex, lastIndex);
 
-  const totalPages = Math.ceil(users.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
 
   const pageNumbers = [...Array(totalPages + 1).keys()].slice(1);
 
@@ -39,6 +45,9 @@ const AdminUserData = () => {
   const nextPage = () => {
     if (currentPage !== totalPages) setCurrentPage(currentPage + 1);
   };
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   return (
     <>
@@ -48,6 +57,20 @@ const AdminUserData = () => {
           <AdminTopbar />
 
           <div className="dashboard">
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  maxWidth: "500px",
+                  padding: "10px",
+                  fontSize: "14px",
+                }}
+              />
+            </div>
             <h2 className="mb-3">All Users</h2>
 
             <Table striped bordered hover responsive>

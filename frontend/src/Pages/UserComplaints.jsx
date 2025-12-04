@@ -23,12 +23,17 @@ const UserComplaints = ({ user_id }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedImages, setSelectedImages] = useState(null);
   const [adding, setAdding] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredComplaints = complaints.filter((complaint) => {
+    const query = searchQuery.toLowerCase();
+    return complaint.complaint?.toLowerCase().includes(query);
+  });
   const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(complaints.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredComplaints.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentComplaints = complaints.slice(startIndex, endIndex);
+  const currentComplaints = filteredComplaints.slice(startIndex, endIndex);
 
   const goToPage = (page) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
@@ -38,9 +43,21 @@ const UserComplaints = ({ user_id }) => {
     <div className="admin-container">
       <UserSidebar />
       <div className="main-content">
-        <UserTopbar />
-
         <div className="dashboard">
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                maxWidth: "500px",
+                padding: "10px",
+                fontSize: "14px",
+              }}
+            />
+          </div>
           <div className="complaints-container">
             <div className="complaints-wrapper">
               <button
@@ -61,7 +78,12 @@ const UserComplaints = ({ user_id }) => {
                   <div key={complaint.complaint_id} className="complaint-card">
                     <div className="complaint-header">
                       <div className="complaint-info">
-                        <h2 className="complaint-name">{complaint.name}</h2>
+                        <h2 className="complaint-name">
+                          Name:{complaint.complaint}
+                        </h2>
+                        <p>
+                          <b>Address</b>:{complaint.complaint_address}
+                        </p>
                         <span
                           className={`status-badge status-${complaint.status}`}
                         >

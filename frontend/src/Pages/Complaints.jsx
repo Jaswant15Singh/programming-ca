@@ -15,7 +15,13 @@ const Complaints = () => {
   const [showAssignForm, setShowAssignForm] = useState(false);
   const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const [currentOfficerId, setCurrentOfficerId] = useState(null);
+  const [fetching, setFetching] = useState(false);
   const recordsPerPage = 5;
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredUsers = users.filter((user) => {
+    const query = searchQuery.toLowerCase();
+    return user.user_name?.toLowerCase().includes(query);
+  });
 
   const handleAssignClick = async (complaint) => {
     setSelectedComplaintId(complaint.complaint_id);
@@ -48,19 +54,20 @@ const Complaints = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetching]);
 
   async function fetchUsers() {
     const res = await fetch("http://localhost:5000/complaint/get-complaints");
     const data = await res.json();
     setUsers(data);
+    setFetching(true);
   }
 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const currentUsers = users.slice(firstIndex, lastIndex);
+  const currentUsers = filteredUsers.slice(firstIndex, lastIndex);
 
-  const totalPages = Math.ceil(users.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
 
   const pageNumbers = [...Array(totalPages + 1).keys()].slice(1);
 
@@ -81,7 +88,20 @@ const Complaints = () => {
       <div className="admin-container">
         <AdminSidebar />
         <div className="main-content">
-          <AdminTopbar />
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by Username..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                maxWidth: "500px",
+                padding: "10px",
+                fontSize: "14px",
+              }}
+            />
+          </div>
 
           <div className="dashboard">
             <ComplainAdd
