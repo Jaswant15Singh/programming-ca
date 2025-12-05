@@ -1,40 +1,60 @@
-import React from "react";
+import { React, useState } from "react";
 import "../stylesheet/AdminSidebar.css";
 import { NavLink, useNavigate } from "react-router-dom";
 
 function OfficerSidebar() {
   const navigate = useNavigate("");
+  const [isSidebar, setIsSidebar] = useState(false);
   return (
-    <div className="sidebar">
-      <h2 className="sidebar-logo">Officer Panel</h2>
-
-      <ul className="menu">
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
-          }
-          to="/officer/dashboard"
-        >
-          <li>Dashboard</li>
-        </NavLink>
-
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
-          }
-          to="/officer/complaints"
-        >
-          <li>Complaints</li>
-        </NavLink>
-        <li
+    <div>
+      <h1
+        className="hamburger"
+        onClick={() => {
+          setIsSidebar(!isSidebar);
+        }}
+      >
+        ☰
+      </h1>
+      <div className={`${isSidebar ? "sidebar-open" : "sidebar"}`}>
+        <p
+          className="X"
+          style={{ position: "absolute", left: "10px", top: "10px" }}
           onClick={() => {
-            localStorage.removeItem("officer-token");
-            navigate("/");
+            setIsSidebar(!isSidebar);
           }}
         >
-          Logout
-        </li>
-      </ul>
+          X
+        </p>
+        <h2 className="sidebar-logo">Officer Panel</h2>
+
+        <ul className="menu">
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+            }
+            to="/officer/dashboard"
+          >
+            <li>Dashboard</li>
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "link-admin-sidebar active" : "link-admin-sidebar"
+            }
+            to="/officer/complaints"
+          >
+            <li>Complaints</li>
+          </NavLink>
+          <li
+            onClick={() => {
+              localStorage.removeItem("officer-token");
+              navigate("/");
+            }}
+          >
+            Logout
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
