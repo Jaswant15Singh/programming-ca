@@ -108,27 +108,31 @@ const Zones = () => {
               </thead>
 
               <tbody>
-                {currentUsers.map((u, i) => (
-                  <tr key={i}>
-                    <td>{firstIndex + i + 1}</td>
-                    <td>{u.zone_name}</td>
-                    <td>{u.created_date.slice(0, 10)}</td>
-                    <td>{u.updated_date ? u.updated_date : "NA"}</td>
-                    <td>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          setIsAdding(false);
-                          setEditingId(u.zone_id);
-                          setEditingName(u.zone_name);
-                          setShowForm(true);
-                        }}
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {currentUsers.map((u, i) => {
+                  const date = new Date(u.updated_date);
+                  const created_date = new Date(u.created_date);
+                  return (
+                    <tr key={i}>
+                      <td>{firstIndex + i + 1}</td>
+                      <td>{u.zone_name}</td>
+                      <td>{created_date.toLocaleString()}</td>
+                      <td>{u.updated_date ? date.toLocaleString() : "NA"}</td>
+                      <td>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setIsAdding(false);
+                            setEditingId(u.zone_id);
+                            setEditingName(u.zone_name);
+                            setShowForm(true);
+                          }}
+                        >
+                          Update
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
 

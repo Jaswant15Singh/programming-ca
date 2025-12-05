@@ -138,27 +138,34 @@ const Complaints = () => {
               </thead>
 
               <tbody>
-                {currentUsers.map((u, i) => (
-                  <tr key={i}>
-                    <td>{firstIndex + i + 1}</td>
-                    <td>{u.complaint}</td>
-                    <td>{u.user_name}</td>
-                    <td>{u.complaint_address}</td>
-                    <td>{u.zone_name}</td>
-                    <td>{u.status}</td>
-                    <td>{u.complaint_date}</td>
-                    <td>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          handleAssignClick(u);
-                        }}
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {currentUsers.map((u, i) => {
+                  return (
+                    <tr key={i}>
+                      <td>{firstIndex + i + 1}</td>
+                      <td>{u.complaint}</td>
+                      <td>{u.user_name}</td>
+                      <td>{u.complaint_address}</td>
+                      <td>{u.zone_name}</td>
+                      <td>{u.status}</td>
+                      <td>
+                        {u.complaint_date
+                          ? new Date(u.complaint_date).toLocaleString()
+                          : "NA"}
+                      </td>
+
+                      <td>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            handleAssignClick(u);
+                          }}
+                        >
+                          Update
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
 

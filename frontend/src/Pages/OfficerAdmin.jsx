@@ -119,34 +119,40 @@ const OffficerAdmin = () => {
               </thead>
 
               <tbody>
-                {currentUsers.map((u, i) => (
-                  <tr key={i}>
-                    <td>{firstIndex + i + 1}</td>
-                    <td>{u.officer_name}</td>
-                    <td>{u.officer_address}</td>
-                    <td>{u.officer_email}</td>
-                    <td>{u.officer_contact}</td>
-                    <td>{u.created_date.slice(0, 10)}</td>
-                    <td>{u.updated_date ? u.updated_date : "NA"}</td>
-                    <td>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          setIsAdding(false);
-                          setEditingId(u.officer_id);
-                          setEditingName(u.officer_name);
-                          setEditingAddress(u.officer_address);
-                          setEditingEmail(u.officer_email);
-                          setEditingContact(u.officer_contact);
-                          setEditingUsername(u.login_username);
-                          setShowForm(true);
-                        }}
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {currentUsers.map((u, i) => {
+                  const date = new Date(u.created_date);
+                  const updated_date = new Date(u.updated_date);
+                  return (
+                    <tr key={i}>
+                      <td>{firstIndex + i + 1}</td>
+                      <td>{u.officer_name}</td>
+                      <td>{u.officer_address}</td>
+                      <td>{u.officer_email}</td>
+                      <td>{u.officer_contact}</td>
+                      <td>{date.toLocaleString()}</td>
+                      <td>
+                        {u.updated_date ? updated_date.toLocaleString() : "NA"}
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setIsAdding(false);
+                            setEditingId(u.officer_id);
+                            setEditingName(u.officer_name);
+                            setEditingAddress(u.officer_address);
+                            setEditingEmail(u.officer_email);
+                            setEditingContact(u.officer_contact);
+                            setEditingUsername(u.login_username);
+                            setShowForm(true);
+                          }}
+                        >
+                          Update
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
 
