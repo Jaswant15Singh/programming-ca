@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    PORT: 5173,
+    origin: "*",
   })
 );
 app.use((req, res, next) => {
