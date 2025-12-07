@@ -1,11 +1,11 @@
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
   database: process.env.DATABASE,
   password: process.env.DATABASE_PASSWORD,
-  port: 5432,
+  port: process.env.DB_PORT,
 });
 
 const executeQuery = async (text, params = []) => {
