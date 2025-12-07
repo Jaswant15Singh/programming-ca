@@ -11,11 +11,7 @@ const officer = require("./router/officer");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-// });
 app.use(
   cors({
     origin: "*",
