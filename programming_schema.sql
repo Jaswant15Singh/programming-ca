@@ -36,11 +36,11 @@ CREATE TABLE public.admin_def (
 );
 
 
-insert into public.admin_def values(
-    1,'admin','Dublin','admin@gmail.com',
-    '892009623','2025-11-17 11:56:29.267 +0000','admin','$2b$10$pk3izOhZ35EVUemDwwjmcORXQiPRUit7isOCaQIhlON0NH5E2Vj1C'
+-- insert into public.admin_def values(
+--     1,'admin','Dublin','admin@gmail.com',
+--     '892009623','2025-11-17 11:56:29.267 +0000','admin','$2b$10$pk3izOhZ35EVUemDwwjmcORXQiPRUit7isOCaQIhlON0NH5E2Vj1C'
 
-)
+-- )
 ALTER TABLE public.admin_def OWNER TO postgres;
 
 --
