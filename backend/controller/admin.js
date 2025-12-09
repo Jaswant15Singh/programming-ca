@@ -177,7 +177,9 @@ const deleteAdmin = async (req, res) => {
 
 const getZones = async (req, res) => {
   try {
-    const result = await executeQuery("SELECT * FROM zones_def");
+    const result = await executeQuery(
+      "SELECT * FROM zones_def order by created_date desc"
+    );
     res.status(200).json(result.rows);
   } catch (error) {
     res.status(500).json({ message: "Server Error", success: false });
@@ -185,7 +187,8 @@ const getZones = async (req, res) => {
 };
 const createZone = async (req, res) => {
   try {
-    const { zone_name } = req.body;
+    let { zone_name } = req.body;
+    zone_name = zone_name.trim();
     const zoneName = zone_name.toLowerCase();
     const isZonePresent = await executeQuery(
       "select * from zones_def where zone_name=$1",
@@ -229,7 +232,9 @@ const updateZone = async (req, res) => {
 
 const getAllOfficers = async (req, res) => {
   try {
-    const data = await executeQuery("select * from officer_def");
+    const data = await executeQuery(
+      "select * from officer_def order by created_date desc"
+    );
     res.json(data.rows);
   } catch (error) {
     console.log(error);
@@ -263,6 +268,13 @@ const createOfficer = async (req, res) => {
       password,
     } = req.body;
 
+    const isOfficerPresent = await executeQuery(
+      "select * from officer_def where login_username=$1",
+      [login_username]
+    );
+    if (isOfficerPresent.rows.length > 0) {
+      return res.status(400).json({ message: "Officer already exists" });
+    }
     if (!login_username || !password) {
       return res
         .status(400)

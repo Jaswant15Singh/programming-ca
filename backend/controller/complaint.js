@@ -3,7 +3,7 @@ const getComplaint = async (req, res) => {
   try {
     const result =
       await executeQuery(`select  cd.complaint_id,cd.complaint,zd.zone_name,cd.complaint_address,cd.complaint_images ,u.user_name,cd.status,cd.complaint_date from complaint_def cd
-inner join users_def  u on u.user_id=cd.user_id inner join zones_def zd on zd.zone_id=cd.zone_name`);
+inner join users_def  u on u.user_id=cd.user_id inner join zones_def zd on zd.zone_id=cd.zone_name order by cd.complaint_date desc`);
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
