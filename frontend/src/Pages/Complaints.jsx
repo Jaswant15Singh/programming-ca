@@ -11,7 +11,6 @@ import ComplainAdd from "../Components/UpdateComplain";
 const Complaints = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showForm, setShowForm] = useState(false);
   const [showAssignForm, setShowAssignForm] = useState(false);
   const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const [currentOfficerId, setCurrentOfficerId] = useState(null);
@@ -111,14 +110,7 @@ const Complaints = () => {
               onSuccess={handleAssignSuccess}
               currentOfficerId={currentOfficerId}
             />
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setShowForm(!showForm);
-              }}
-            >
-              Add Officer
-            </button>
+
             <br />
             <br />
             <h2 className="mb-3">All Complaints</h2>

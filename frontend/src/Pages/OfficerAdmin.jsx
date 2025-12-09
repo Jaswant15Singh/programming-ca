@@ -109,6 +109,7 @@ const OffficerAdmin = () => {
                 <tr>
                   <th>#</th>
                   <th>Name</th>
+                  <th>UserName</th>
                   <th>Address</th>
                   <th>Email</th>
                   <th>Contact</th>
@@ -126,6 +127,7 @@ const OffficerAdmin = () => {
                     <tr key={i}>
                       <td>{firstIndex + i + 1}</td>
                       <td>{u.officer_name}</td>
+                      <td>{u.login_username}</td>
                       <td>{u.officer_address}</td>
                       <td>{u.officer_email}</td>
                       <td>{u.officer_contact}</td>

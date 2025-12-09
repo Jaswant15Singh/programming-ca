@@ -129,6 +129,10 @@ const OfficerComplains = () => {
                         className="btn btn-primary"
                         onClick={async () => {
                           const isConfirm = confirm("Are you sure?");
+                          if (u.status === "resolved") {
+                            alert("Already resolved");
+                            return;
+                          }
                           if (isConfirm) {
                             try {
                               const result = await fetch(
