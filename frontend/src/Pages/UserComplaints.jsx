@@ -3,9 +3,13 @@ import "../stylesheet/UserComplaints.css";
 import UserSidebar from "../Components/UserSidebar";
 import UserTopbar from "../Components/UserTopbar";
 import AddComplain from "../Components/AddComplain";
+import { jwtDecode } from "jwt-decode";
+
 ("../Components/AdminDashboard");
-const UserComplaints = ({ user_id }) => {
+const UserComplaints = () => {
   const [complaints, setComplaints] = useState([]);
+  const token = localStorage.getItem("user-token");
+  const user_id = jwtDecode(token).user_id;
   useEffect(() => {
     getComplaints();
   }, []);
@@ -70,7 +74,11 @@ const UserComplaints = ({ user_id }) => {
               </button>
               <br />
               <br />
-              <AddComplain adding={adding} user_id={user_id} />
+              <AddComplain
+                adding={adding}
+                user_id={user_id}
+                setAdding={setAdding}
+              />
               <h1 className="complaints-title">My Complaints</h1>
 
               <div className="complaints-list">

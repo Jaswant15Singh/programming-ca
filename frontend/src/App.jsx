@@ -129,7 +129,7 @@ function App() {
           path="/resident/complaints"
           element={
             <UserRoute>
-              <UserComplaints user_id={userData?.user_id} />
+              <UserComplaints />
             </UserRoute>
           }
         />

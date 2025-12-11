@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../stylesheet/AddComplain.css";
 
-const AddComplain = ({ adding, user_id }) => {
+const AddComplain = ({ adding, user_id, setAdding }) => {
   const [complaintName, setComplaintName] = useState("");
   const [images, setImages] = useState([]);
   const [zone, setZone] = useState(null);
@@ -68,8 +68,6 @@ const AddComplain = ({ adding, user_id }) => {
     formData.append("zone_name", zone_name);
     formData.append("address", address);
 
-    console.log(zone);
-
     formData.entries().forEach((e) => {
       console.log(e);
     });
@@ -107,6 +105,19 @@ const AddComplain = ({ adding, user_id }) => {
           <h1 className="form-title">Submit a Complaint</h1>
 
           <form onSubmit={handleSubmit} className="complaint-form">
+            <p
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setAdding(false);
+              }}
+            >
+              X
+            </p>
             <div className="form-group">
               <label htmlFor="complaintName" className="form-label">
                 Complaint Name
@@ -132,7 +143,11 @@ const AddComplain = ({ adding, user_id }) => {
                 onChange={(e) => {
                   setZoneName(e.target.value);
                 }}
+                value={zone_name}
               >
+                <option value="" disabled={true}>
+                  Select zone
+                </option>
                 {zone.map((e) => (
                   <option value={e.zone_id} key={e.zone_id}>
                     {e.zone_name}
