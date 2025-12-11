@@ -37,6 +37,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ success: false, message: err.message });
 });
-app.listen(5000, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is listening on port ${process.env.PORT}`);
 });

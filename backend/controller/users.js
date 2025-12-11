@@ -22,6 +22,13 @@ const addUser = async (req, res) => {
       password,
     } = req.body;
 
+    const isUsrrPresent = await executeQuery(
+      "select * from users_def where login_username=$1",
+      [login_username]
+    );
+    if (isUsrrPresent.rows.length > 0) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
     if (!login_username || !password) {
       return res
         .status(400)
