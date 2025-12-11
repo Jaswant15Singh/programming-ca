@@ -81,11 +81,14 @@ export default function UserLogin() {
       };
       console.log(payload);
 
-      const res = await fetch("http://localhost:5000/users/add-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://programming-ca.onrender.com/users/add-user",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await res.json();
 
@@ -131,13 +134,16 @@ export default function UserLogin() {
         login_username: loginUsername,
         password: loginPassword,
       };
-      const res = await fetch("http://localhost:5000/users/user-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://programming-ca.onrender.com/users/user-login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         setLoginMessage({

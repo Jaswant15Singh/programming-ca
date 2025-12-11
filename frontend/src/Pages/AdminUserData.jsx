@@ -21,7 +21,9 @@ const AdminUserData = () => {
   }, []);
 
   async function fetchUsers() {
-    const res = await fetch("http://localhost:5000/users/get-users");
+    const res = await fetch(
+      "https://programming-ca.onrender.com/users/get-users"
+    );
     const data = await res.json();
     setUsers(data);
   }

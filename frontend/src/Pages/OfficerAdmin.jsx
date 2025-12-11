@@ -31,7 +31,9 @@ const OffficerAdmin = () => {
   }, [fetching]);
 
   async function fetchUsers() {
-    const res = await fetch("http://localhost:5000/admin/get-all-officers");
+    const res = await fetch(
+      "https://programming-ca.onrender.com/admin/get-all-officers"
+    );
     const data = await res.json();
     setUsers(data);
   }

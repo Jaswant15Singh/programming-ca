@@ -23,7 +23,7 @@ const UserProfile = ({ user_id }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:5000/users/profile/${user_id}`
+        `https://programming-ca.onrender.com/users/profile/${user_id}`
       );
       const data = await response.json();
       console.log(data);
@@ -60,16 +60,19 @@ const UserProfile = ({ user_id }) => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/users/update-user`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id,
-          ...profileData,
-        }),
-      });
+      const response = await fetch(
+        `https://programming-ca.onrender.com/users/update-user`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id,
+            ...profileData,
+          }),
+        }
+      );
 
       if (response.ok) {
         alert("Profile updated successfully!");

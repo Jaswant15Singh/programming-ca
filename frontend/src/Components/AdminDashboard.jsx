@@ -15,10 +15,10 @@ function AdminDashboard() {
   async function getAllData() {
     const result = await Promise.all(
       [
-        "http://localhost:5000/users/get-users",
-        "http://localhost:5000/complaint/get-complaints",
-        "http://localhost:5000/admin/get-zones",
-        "http://localhost:5000/admin/get-all-officers",
+        "https://programming-ca.onrender.com/users/get-users",
+        "https://programming-ca.onrender.com/complaint/get-complaints",
+        "https://programming-ca.onrender.com/admin/get-zones",
+        "https://programming-ca.onrender.com/admin/get-all-officers",
       ].map(async (e) => {
         const result = await fetch(e);
         const data = await result.json();

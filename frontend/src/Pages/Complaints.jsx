@@ -27,7 +27,7 @@ const Complaints = () => {
     setShowAssignForm(true);
     try {
       const result = await fetch(
-        "http://localhost:5000/complaint/get-single-comment",
+        "https://programming-ca.onrender.com/complaint/get-single-comment",
         {
           method: "POST",
           headers: {
@@ -56,7 +56,9 @@ const Complaints = () => {
   }, [fetching]);
 
   async function fetchUsers() {
-    const res = await fetch("http://localhost:5000/complaint/get-complaints");
+    const res = await fetch(
+      "https://programming-ca.onrender.com/complaint/get-complaints"
+    );
     const data = await res.json();
     setUsers(data);
     setFetching(true);

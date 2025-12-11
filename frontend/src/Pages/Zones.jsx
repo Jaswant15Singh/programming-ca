@@ -26,7 +26,9 @@ const Zones = () => {
   }, [fetching]);
 
   async function fetchUsers() {
-    const res = await fetch("http://localhost:5000/admin/get-zones");
+    const res = await fetch(
+      "https://programming-ca.onrender.com/admin/get-zones"
+    );
     const data = await res.json();
     setUsers(data);
   }

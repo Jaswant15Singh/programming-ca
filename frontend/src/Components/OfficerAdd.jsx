@@ -101,8 +101,8 @@ export default function OfficerAdd({
 
       const res = await fetch(
         isAdding
-          ? "http://localhost:5000/admin/create-officer"
-          : `http://localhost:5000/officer/update-officer/${editingId}`,
+          ? "https://programming-ca.onrender.com/admin/create-officer"
+          : `https://programming-ca.onrender.com/officer/update-officer/${editingId}`,
         {
           method: isAdding ? "POST" : "PUT",
           headers: { "Content-Type": "application/json" },

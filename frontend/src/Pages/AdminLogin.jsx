@@ -98,11 +98,14 @@ export default function AdminLogin() {
       };
       console.log(payload);
 
-      const res = await fetch("http://localhost:5000/users/add-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://programming-ca.onrender.com/users/add-user",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await res.json();
 
@@ -149,8 +152,8 @@ export default function AdminLogin() {
       const res = await fetch(
         `${
           isAdmin
-            ? "http://localhost:5000/admin/admin-login"
-            : "http://localhost:5000/admin/officer-login"
+            ? "https://programming-ca.onrender.com/admin/admin-login"
+            : "https://programming-ca.onrender.com/admin/officer-login"
         }`,
         {
           method: "POST",

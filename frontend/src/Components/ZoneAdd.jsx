@@ -48,8 +48,8 @@ export default function ZoneAdd({
 
       const res = await fetch(
         isAdding
-          ? "http://localhost:5000/admin/create-zone"
-          : `http://localhost:5000/admin/update-zone/${zone_id}`,
+          ? "https://programming-ca.onrender.com/admin/create-zone"
+          : `https://programming-ca.onrender.com/admin/update-zone/${zone_id}`,
         {
           method: isAdding ? "POST" : "PUT",
           headers: { "Content-Type": "application/json" },

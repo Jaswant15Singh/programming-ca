@@ -27,7 +27,9 @@ export default function ComplainAdd({
   }, [showForm, currentOfficerId]);
   const fetchOfficers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/admin/get-all-officers");
+      const res = await fetch(
+        "https://programming-ca.onrender.com/admin/get-all-officers"
+      );
       const data = await res.json();
       setOfficerList(data);
     } catch (error) {
@@ -48,7 +50,7 @@ export default function ComplainAdd({
     setSubmitting(true);
     try {
       const res = await fetch(
-        `http://localhost:5000/complaint/assign-officer-complaint/${complaintId}`,
+        `https://programming-ca.onrender.com/complaint/assign-officer-complaint/${complaintId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

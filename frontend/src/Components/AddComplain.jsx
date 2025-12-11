@@ -36,7 +36,9 @@ const AddComplain = ({ adding, user_id, setAdding }) => {
 
   const getZone = async () => {
     try {
-      const result = await fetch("http://localhost:5000/admin/get-zones");
+      const result = await fetch(
+        "https://programming-ca.onrender.com/admin/get-zones"
+      );
       const data = await result.json();
       setZone(data);
     } catch (error) {
@@ -74,7 +76,7 @@ const AddComplain = ({ adding, user_id, setAdding }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/complaint/add-complaint",
+        "https://programming-ca.onrender.com/complaint/add-complaint",
         {
           method: "POST",
           body: formData,

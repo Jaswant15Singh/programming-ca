@@ -13,7 +13,7 @@ function OfficerDashboard() {
     const token = localStorage.getItem("officer-token");
     const officer_id = jwtDecode(token).officer_id;
     const data = await fetch(
-      "http://localhost:5000/officer/complaints-by-officers",
+      "https://programming-ca.onrender.com/officer/complaints-by-officers",
       {
         method: "POST",
         headers: {

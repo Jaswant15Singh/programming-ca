@@ -14,13 +14,13 @@ function UserDashboard() {
 
   async function getAllData(user_id) {
     const result = await Promise.all(
-      [`http://localhost:5000/complaint/get-complaints-by-user/${user_id}`].map(
-        async (e) => {
-          const result = await fetch(e);
-          const data = await result.json();
-          return data;
-        }
-      )
+      [
+        `https://programming-ca.onrender.com/complaint/get-complaints-by-user/${user_id}`,
+      ].map(async (e) => {
+        const result = await fetch(e);
+        const data = await result.json();
+        return data;
+      })
     );
     setComplaints(result[0]);
   }

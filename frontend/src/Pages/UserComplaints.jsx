@@ -16,7 +16,7 @@ const UserComplaints = () => {
 
   const getComplaints = async () => {
     const res = await fetch(
-      `http://localhost:5000/complaint/get-complaints-by-user/${user_id}`
+      `https://programming-ca.onrender.com/complaint/get-complaints-by-user/${user_id}`
     );
     const data = await res.json();
     console.log(data);
@@ -111,7 +111,7 @@ const UserComplaints = () => {
                         {complaint.complaint_images.map((img, idx) => (
                           <img
                             key={idx}
-                            src={`http://localhost:5000/${img.replace(
+                            src={`https://programming-ca.onrender.com/${img.replace(
                               "public",
                               ""
                             )}`}

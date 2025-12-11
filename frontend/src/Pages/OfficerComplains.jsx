@@ -29,7 +29,7 @@ const OfficerComplains = () => {
     const officer_id = jwtDecode(token).officer_id;
     setOff_id(officer_id);
     const res = await fetch(
-      "http://localhost:5000/officer/complaints-by-officers",
+      "https://programming-ca.onrender.com/officer/complaints-by-officers",
       {
         method: "POST",
         headers: {
@@ -111,7 +111,7 @@ const OfficerComplains = () => {
                     <td style={{ maxHeight: "100px", overflowY: "scroll" }}>
                       {u.complaint_images.map((e) => (
                         <img
-                          src={`http://localhost:5000/${e}`.replace(
+                          src={`https://programming-ca.onrender.com/${e}`.replace(
                             "/public",
                             ""
                           )}
@@ -136,7 +136,7 @@ const OfficerComplains = () => {
                           if (isConfirm) {
                             try {
                               const result = await fetch(
-                                "http://localhost:5000/officer/update-complaints-by-officers",
+                                "https://programming-ca.onrender.com/officer/update-complaints-by-officers",
                                 {
                                   method: "POST",
                                   headers: {
