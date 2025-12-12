@@ -40,6 +40,8 @@ const AddComplain = ({ adding, user_id, setAdding }) => {
         "https://programming-ca.onrender.com/admin/get-zones"
       );
       const data = await result.json();
+      setZoneName(data[0].zone_id);
+
       setZone(data);
     } catch (error) {
       console.log(error);

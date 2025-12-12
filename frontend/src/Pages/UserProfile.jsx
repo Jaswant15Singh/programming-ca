@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import "../stylesheet/UserProfile.css";
 import UserSidebar from "../Components/UserSidebar";
 import UserTopbar from "../Components/UserTopbar";
 
-const UserProfile = ({ user_id }) => {
+const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState({
@@ -13,6 +14,8 @@ const UserProfile = ({ user_id }) => {
     user_address: "",
   });
   const [originalData, setOriginalData] = useState({});
+  const token = localStorage.getItem("user-token");
+  const user_id = jwtDecode(token).user_id;
 
   // Fetch user profile data
   useEffect(() => {
