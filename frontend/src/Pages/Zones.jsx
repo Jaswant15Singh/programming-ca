@@ -117,8 +117,9 @@ const Zones = () => {
                     <tr key={i}>
                       <td>{firstIndex + i + 1}</td>
                       <td>{u.zone_name}</td>
-                      <td>{created_date.toLocaleString()}</td>
-                      <td>{u.updated_date ? date.toLocaleString() : "NA"}</td>
+                      <td>{created_date.toTimeString()}</td>
+
+                      <td>{u.updated_date ? date.toTimeString() : "NA"}</td>
                       <td>
                         <button
                           className="btn btn-primary"

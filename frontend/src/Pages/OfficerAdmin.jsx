@@ -133,9 +133,9 @@ const OffficerAdmin = () => {
                       <td>{u.officer_address}</td>
                       <td>{u.officer_email}</td>
                       <td>{u.officer_contact}</td>
-                      <td>{date.toLocaleString()}</td>
+                      <td>{date.toTimeString()}</td>
                       <td>
-                        {u.updated_date ? updated_date.toLocaleString() : "NA"}
+                        {u.updated_date ? updated_date.toTimeString() : "NA"}
                       </td>
                       <td>
                         <button

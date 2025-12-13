@@ -143,7 +143,7 @@ const Complaints = () => {
                       <td>{u.status}</td>
                       <td>
                         {u.complaint_date
-                          ? new Date(u.complaint_date).toLocaleString()
+                          ? new Date(u.complaint_date).toTimeString()
                           : "NA"}
                       </td>
 

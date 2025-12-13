@@ -123,7 +123,7 @@ const OfficerComplains = () => {
                       ))}
                     </td>
                     <td>{u.status}</td>
-                    <td>{new Date(u.complaint_date).toLocaleString()}</td>
+                    <td>{new Date(u.complaint_date).toTimeString()}</td>
                     <td>
                       <button
                         className="btn btn-primary"

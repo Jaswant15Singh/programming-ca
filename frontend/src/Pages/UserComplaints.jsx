@@ -90,8 +90,11 @@ const UserComplaints = () => {
                           Name:{complaint.complaint}
                         </h2>
                         <p>
-                          <b>Address</b>:{complaint.complaint_address}
+                          <b>Address</b>:{complaint.complaint_address}{" "}
                         </p>
+                        <span>
+                          {new Date(complaint.complaint_date).toTimeString()}
+                        </span>
                         <span
                           className={`status-badge status-${complaint.status}`}
                         >

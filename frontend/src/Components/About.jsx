@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const About = () => {
   return (
     <div className="container py-5">
@@ -33,7 +35,13 @@ const About = () => {
             manage, update, and resolve issues.
           </p>
 
-          <button className="btn btn-primary mt-2">Be a part of us</button>
+          <Link
+            className="link"
+            style={{ padding: "50x", background: "black", color: "white" }}
+            to="/resident-login"
+          >
+            Be a part of us
+          </Link>
         </div>
       </div>
     </div>

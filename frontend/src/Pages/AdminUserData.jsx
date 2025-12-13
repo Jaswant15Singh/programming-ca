@@ -97,7 +97,7 @@ const AdminUserData = () => {
                     <td>{u.user_email}</td>
                     <td>{u.user_contact}</td>
                     <td>{u.user_address}</td>
-                    <td>{new Date(u.created_date).toLocaleString()}</td>
+                    <td>{new Date(u.created_date).toTimeString()}</td>
                   </tr>
                 ))}
               </tbody>
