@@ -18,7 +18,7 @@ const getComplaintByUsers = async (req, res) => {
       return res.status(400).json({ message: "Missing Fields" });
     }
     const result = await executeQuery(
-      "SELECT * FROM complaint_def where user_id=$1",
+      "SELECT * FROM complaint_def where user_id=$1 order by complaint_date desc",
       [user_id]
     );
     res.status(200).json(result.rows);
