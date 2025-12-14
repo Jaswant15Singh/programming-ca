@@ -1,4 +1,10 @@
-On CivicVoice, residents can report non-emergency local problems like broken streetlights,potholes, etc. Users can submit, view, and search reports, while admins can view complains,add zones and officers.Officers are assigned on the basis of complaints and are responsible to manage the user complaints. It makes it easier for local authorities to track issues and facilitates community engagement.
+CricVoice is a platform where users can register complaints regarding local problems such as potholes, street lights and other problems related to local problems in their zone. Following this, admin can view these complaints and assign officers based on the zone of complaints. Officers then have responsibility to update the status of the user complaints.
+Users can see the status of their complaints along with managing their user profile.
+
+The project uses React.js for frontend, Node.js Express.js for backend and PostgreSQL for databases. The whole implementation such that CRUD(Create, Read, Update, Delete) operations are performed in order to achieve the functionalities of the project.
+This project has roles divided for users, admins and officers. Residents can view and add complaints along with managing their profile.Admin and officers are part of admin side, where admin can see all users,zones,officers and complaints and hence thereforth assign officers based on the zone of the resident’s complaint. Officer can see all the complaints which are assigned to them and hence has the privilege to update the complaint’s status.
+
+JWT has been used for authentication and is stored in LocalStorage of the browser to manage role based requirements.
 
 AI has been used in assisting the project and relevant links are provided for the reference:
 
