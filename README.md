@@ -1,4 +1,4 @@
-CricVoice is a platform where users can register complaints regarding local problems such as potholes, street lights and other problems related to local problems in their zone. Following this, admin can view these complaints and assign officers based on the zone of complaints. Officers then have responsibility to update the status of the user complaints.
+CivicVoice is a platform where users can register complaints regarding local problems such as potholes, street lights and other problems related to local problems in their zone. Following this, admin can view these complaints and assign officers based on the zone of complaints. Officers then have responsibility to update the status of the user complaints.
 Users can see the status of their complaints along with managing their user profile.
 
 The project uses React.js for frontend, Node.js Express.js for backend and PostgreSQL for databases. The whole implementation such that CRUD(Create, Read, Update, Delete) operations are performed in order to achieve the functionalities of the project.
