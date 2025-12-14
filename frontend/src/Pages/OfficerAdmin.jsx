@@ -116,7 +116,6 @@ const OffficerAdmin = () => {
                   <th>Email</th>
                   <th>Contact</th>
                   <th>Created date</th>
-                  <th>Update date</th>
                   <th>Update</th>
                 </tr>
               </thead>
@@ -124,7 +123,6 @@ const OffficerAdmin = () => {
               <tbody>
                 {currentUsers.map((u, i) => {
                   const date = new Date(u.created_date);
-                  const updated_date = new Date(u.updated_date);
                   return (
                     <tr key={i}>
                       <td>{firstIndex + i + 1}</td>
@@ -134,9 +132,6 @@ const OffficerAdmin = () => {
                       <td>{u.officer_email}</td>
                       <td>{u.officer_contact}</td>
                       <td>{date.toTimeString()}</td>
-                      <td>
-                        {u.updated_date ? updated_date.toTimeString() : "NA"}
-                      </td>
                       <td>
                         <button
                           className="btn btn-primary"
